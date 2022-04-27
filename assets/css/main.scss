@@ -1,0 +1,21 @@
+---
+search: false
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/default";
+@import "minimal-mistakes";
+
+:root {
+  color-scheme: dark light;
+}
+
+.page {
+  float: unset;
+  width: unset;
+}
+
+div.footnotes p {
+  margin: unset;
+}
