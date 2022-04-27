@@ -1,0 +1,18 @@
+title: Laura's (Mostly) Unreal Blog
+masthead_title: "Laura's <!--Toxic Tips--> (Mostly) Unreal Blog 🌺"
+url: "https://landelare.github.io"
+github_username: landelare
+
+remote_theme: "landelare/minimal-mistakes@1a85a2868528f97ea631b71157b004665b29b422"
+plugins:
+  - jekyll-feed
+  - jekyll-include-cache
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      toc: true
+      toc_sticky: true
