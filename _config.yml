@@ -1,0 +1,17 @@
+title: Laura's Unreal Blog
+url: "https://landelare.github.io"
+github_username: landelare
+
+remote_theme: "mmistakes/minimal-mistakes@00fa7be38b5e57c6539d3986b2168ea7b57bc67a"
+plugins:
+  - jekyll-feed
+  - jekyll-include-cache
+
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "single"
+      classes: "wide"
