@@ -3,6 +3,8 @@ title:  "A better UE_LOG"
 excerpt: "Step 1 of a journey towards hopefully better logging in Unreal Engine."
 ---
 
+**Part 2 is [HERE](/2022/05/03/better-ue_log-2.html)**
+
 This post assumes that you're already familiar with the various UE logging
 facilities such as `UE_LOG` or `GEngine->AddOnScreenDebugMessage` and examines
 a few approaches on how we can make something better.
