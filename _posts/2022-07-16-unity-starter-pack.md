@@ -1,6 +1,7 @@
 ---
 title:  "Unity to Unreal starter pack"
 excerpt: "A small collection of things that I wish I was told when I jumped ship."
+last_modified_at: 2022-09-27
 ---
 
 It seems that
@@ -221,69 +222,5 @@ infamous examples.
 
 ## Tips and tricks
 
-### Automatically update C++ binaries
-If your team is small enough that you can have everyone install Visual Studio,
-add this to DefaultEditorPerProjectUserSettings.ini in Config (create it if it
-doesn't exist yet):
-```
-[/Script/UnrealEd.EditorLoadingSavingSettings]
-bForceCompilationAtStartup=True
-```
-
-This makes it so that opening the project from the .uproject file compiles C++,
-avoiding having to make and distribute builds across the team.
-Designers and artists need only to install the required build tools, forget they
-ever existed, and enjoy using the correct binaries with zero additional effort.
-Otherwise, note that .uproject uses the `Development Editor` configuration,
-which is optimized. If you've been working with `DebugGame Editor` it might be
-outdated. For developers the easy "fix" is to always launch the editor from VS.
-
-If you have settings in Saved, those take precedence so check there if it
-doesn't seem to have an effect. That's EditorPerProjectUserSettings.ini without
-Default in its name.
-
-### Restore camera after Play-In-Editor ("Play Mode")
-
-By default the camera stays where you were when you ended PIE.
-If you prefer, you can change it to return where it was by adding this to
-DefaultEditorPerProjectUserSettings.ini:
-```
-[/Script/UnrealEd.LevelEditorViewportSettings]
-bEnableViewportCameraToUpdateFromPIV=False
-```
-
-PIV was the old name of PIE: Play-In-Viewport.
-
-### Opt out of data collection
-
-These are also editor options but since you probably have
-DefaultEditorPerProjectUserSettings.ini open already:
-```
-[/Script/UnrealEd.AnalyticsPrivacySettings]
-bSendUsageData=False
-
-[/Script/UnrealEd.CrashReportsPrivacySettings]
-bSendUnattendedBugReports=False
-```
-
-If you want to further reduce the amount of network traffic that the editor
-generates, add this to DefaultEngine.ini but note that this can impact
-functionality:
-```
-[/Script/UdpMessaging.UdpMessagingSettings]
-EnabledByDefault=False
-EnableTransport=False
-
-[/Script/TcpMessaging.TcpMessagingSettings]
-EnableTransport=False
-```
-
-### Greatly reduce shader compilation
-
-DefaultEngine.ini:
-```
-[SystemSettings]
-r.ShaderCompiler.JobCacheDDC=1
-```
-
-This makes shaders get compiled on demand instead of thousands upfront.
+**This section has been moved to a
+[separate article](/2022/09/27/tips-and-tricks.html).**
