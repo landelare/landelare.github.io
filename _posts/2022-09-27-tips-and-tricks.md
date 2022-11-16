@@ -1,6 +1,7 @@
 ---
 title: "Assorted tips and tricks"
 excerpt: "A small collection of hidden settings."
+last_modified_at: 2022-11-16
 ---
 
 This will be nothing new for you if you've read
@@ -64,6 +65,8 @@ EnableTransport=False
 ```
 
 # Greatly reduce shader compilation
+
+_UE5.1 update: This is now turned on by default._
 
 DefaultEngine.ini:
 ```

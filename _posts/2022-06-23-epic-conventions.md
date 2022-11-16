@@ -2,6 +2,7 @@
 title:  "Should I follow the Epic coding standard?"
 excerpt: "Things that I wish I knew when I started and had to learn the hard way.
 This one will be controversial!"
+last_modified_at: 2022-11-16
 ---
 
 This one will be controversial but I really wish someone told me all of this.
@@ -243,8 +244,10 @@ They got better in UE5 but there are still STL-exclusive features (like
 a working `operator==`...) and they have started becoming STL hybrids themselves
 due to language features being defined in terms of `std::tuple_size`,
 (lower-case) `get<i>()`, etc.
-Since there's no BP or reflection support for these it's worth considering not
-using them at all.
+~~Since there's no BP or reflection support for these it's worth considering not
+using them at all.~~<br>
+_UE5.1 update: These now have FArchive support, which makes the decision less
+straightforward._
 
 `TFunction` has some bugs (as of 5.0.2) related to perfect forwarding and who
 knows where else. I stopped looking when my crashes got fixed by nothing but
