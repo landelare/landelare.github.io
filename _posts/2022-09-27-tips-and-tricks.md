@@ -1,17 +1,31 @@
 ---
 title: "Assorted tips and tricks"
 excerpt: "A small collection of hidden settings."
-last_modified_at: 2022-11-16
+last_modified_at: 2022-12-24
 ---
 
 This will be nothing new for you if you've read
 [Unity starter pack](/2022/07/16/unity-starter-pack.html), but these turned out
 to be more popular among people who are otherwise not transitioning from Unity.
 
+# Screen-space rotation widget
+
+Users transitioning from Unity often miss this gizmo,
+and for some reason it's off by default.
+
+In Editor Preferences, look for `Enable Screen Rotate` (there's a search bar),
+or add this to DefaultEditorPerProjectUserSettings.ini in Config (create it if
+it doesn't exist yet):
+
+```
+[/Script/UnrealEd.LevelEditorViewportSettings]
+bAllowScreenRotate=True
+```
+
 # Automatically update C++ binaries
 If your team is small enough that you can have everyone install Visual Studio,
-add this to DefaultEditorPerProjectUserSettings.ini in Config (create it if it
-doesn't exist yet):
+add this to DefaultEditorPerProjectUserSettings.ini:
+
 ```
 [/Script/UnrealEd.EditorLoadingSavingSettings]
 bForceCompilationAtStartup=True

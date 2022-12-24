@@ -1,7 +1,7 @@
 ---
 title:  "Unity to Unreal starter pack"
 excerpt: "A small collection of things that I wish I was told when I jumped ship."
-last_modified_at: 2022-09-27
+last_modified_at: 2022-12-24
 ---
 
 It seems that
@@ -120,9 +120,8 @@ no obvious BP escape route, look into `UDeveloperSettings`.
 Other than this, BP is great for anything that involves logic running across
 multiple frames (their name for async stuff is "latent", nodes with a 🕒 icon).
 I'm ~~shamelessly promoting~~ developing a plugin that adds
-<!--♪-->coroutines<!--♫--> to UE5 (see the top of this page), but C++20 is not a
-first-class citizen in the engine and you have to opt in.
-BP remains the only officially-supported way that doesn't involve callback hell.
+<!--♪-->coroutines<!--♫--> to UE5 (see the top of this page), but BP remains the
+only officially-supported way that doesn't involve callback hell.
 Timeline nodes are very convenient for interpolation and quick one-off
 animations.
 You can easily run them by calling a custom `BlueprintImplementableEvent` from
