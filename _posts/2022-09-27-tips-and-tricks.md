@@ -1,7 +1,7 @@
 ---
 title: "Assorted tips and tricks"
 excerpt: "A small collection of hidden settings."
-last_modified_at: 2022-12-24
+last_modified_at: 2023-01-05
 ---
 
 This will be nothing new for you if you've read
@@ -54,6 +54,17 @@ bEnableViewportCameraToUpdateFromPIV=False
 ```
 
 PIV was the old name of PIE: Play-In-Viewport.
+
+# Debug memory-related crashes
+
+Launch with `-stompmalloc` (use
+[UnrealVS](https://docs.unrealengine.com/5.1/en-US/using-the-unrealvs-extension-for-unreal-engine-cplusplus-projects/)
+or
+[EzArgs](https://plugins.jetbrains.com/plugin/16411-ezargs)) and issue the
+`gc.CollectGarbageEveryFrame 1` console command.
+
+Attempt to reproduce your problem, you should have a much cleaner call stack
+leading to the crash, often directly telling you what went wrong.
 
 # Opt out of data collection
 
