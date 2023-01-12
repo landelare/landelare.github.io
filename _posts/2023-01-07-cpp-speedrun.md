@@ -1,6 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
+last_modified_at: 2023-01-12
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -311,7 +312,7 @@ The common workaround is to use namespaces for your "raw" types that can be in
 one and a short (3-6 characters) prefix based on your project's or company's
 name otherwise, to avoid name collisions with the engine and third-party plugins.
 
-## UObjects
+## UObject
 
 UObjects are UE's .NET `System.Object` equivalent.
 They exclusively live on the heap with a garbage collector taking care of them
@@ -437,6 +438,39 @@ NewObject+RegisterComponent+AddInstanceComponent and attached with the "usual"
 functions that are also available in BP.
 Engine code randomly forgets to call AddInstanceComponent, which leads to, e.g.,
 your component existing but not being visible in the inspector.
+
+## UClass
+
+UClass (not to be confused with `UCLASS`) is the closest equivalent of .NET's
+`System.Type`.
+UClass itself is used the most often, but there are multiple related classes
+that represent types, such as UStruct, UBlueprintGeneratedClass, etc.
+
+The two most common ways of obtaining these objects are `T::StaticClass()` and
+`Obj->GetClass()` (cf. typeof and GetType() in .NET).
+Many engine functions that take a UClass* parameter come with template
+overloads that let you retain some amount of type safety, e.g., `Foo<UExample>()`
+replaces `Cast<UExample>(Foo(UExample::StaticClass()))`.
+
+### TSubclassOf
+{:.no_toc}
+
+This wrapper is often used instead of UClass* to limit the potential values
+that may be set or used.
+It implicitly converts from/to UClass*.
+
+In the editor, UPROPERTYs of this type will limit what options are offered.
+At runtime, if a TSubclassOf contains a "wrong" class, it will be returned as
+nullptr:
+
+```c++
+TSubclassOf<UObject> Example1; // Defaults to no class
+TSubclassOf<UObject> Example2 = UObject::StaticClass(); // Straightforward
+TSubclassOf<AActor>  Example3 = UObject::StaticClass(); // Still OK to do
+check(Example1 == nullptr);
+check(Example2 != nullptr);
+check(Example3 == nullptr); // UObject is not a child of AActor
+```
 
 ## Delegates
 
