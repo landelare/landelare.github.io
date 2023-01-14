@@ -1,7 +1,7 @@
 ---
 title:  "Unity to Unreal starter pack"
 excerpt: "A small collection of things that I wish I was told when I jumped ship."
-last_modified_at: 2022-12-24
+last_modified_at: 2023-01-14
 ---
 
 It seems that
@@ -17,6 +17,8 @@ accounting for the months "lost" on porting and having to learn new tools, it
 was still worth it. (Obviously the project was not near shipping, YMMV.)
 
 # UE4 or UE5?
+
+_[This section is still valid for 5.1.]_
 
 As of writing, 5.0.3 is the latest stable version.
 Speaking of versions, there is no TECH/LTS split in Unreal.
@@ -85,6 +87,9 @@ is building your C++ code with the editor **closed**, **then** starting it anew.
 If you don't already know C++, these are good resources for learning it:<br>
 [https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list](https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list)<br>
 [https://www.learncpp.com](https://www.learncpp.com)<br>
+
+If you do, I wrote [an article](/2023/01/07/cpp-speedrun.html) to bring you up
+to speed.
 
 This (underwhelmingly-titled) course from Epic will introduce you to the various
 `USOMETHING` macros that you're expected to use:<br>
