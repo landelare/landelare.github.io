@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2023-01-12
+last_modified_at: 2023-01-15
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -142,8 +142,8 @@ its users still opt for an .sln-based workflow.
 Your actual build files are the Target.cs and Build.cs files you get when you
 create any starter C++ project template or add a C++ class to a BP-only
 project.
-Take a moment to familiarize yourself with the default folder structure and
-these .cs files' contents.
+[Here](https://docs.unrealengine.com/5.1/en-US/unreal-engine-modules/)'s the
+official documentation on them.
 
 Target.cs files govern building your entire project.
 Targets are things such as editor, standalone, dedicated server.
@@ -160,6 +160,12 @@ An `Example` module would live in the Example folder under Source with an
 other modules would reference it as `"Example"` in, e.g.,
 their PublicDependencyModuleNames.
 These all correspond to each other.
+
+All of these .cs files in a project get compiled together, therefore you can,
+e.g., define an intermediate base class or extension methods to apply common
+build settings.
+Approaches to manage this include adding extra functionality to Target.cs files
+or defining an empty C++ module for nothing else but its C# functionality.
 
 Modules may be part of your project directly or belong to plugins.
 In addition to modules, plugins may also contain content (assets, blueprints)
