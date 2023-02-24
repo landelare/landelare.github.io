@@ -2,7 +2,7 @@
 title:  "Should I follow the Epic coding standard?"
 excerpt: "Things that I wish I knew when I started and had to learn the hard way.
 This one will be controversial!"
-last_modified_at: 2022-11-16
+last_modified_at: 2023-02-24
 ---
 
 This one will be controversial but I really wish someone told me all of this.
@@ -91,6 +91,12 @@ maintainability, and robustness improvement that it mainly provides.
 Even if you disagree with one of the foremost experts on C++, there are
 situations where you can use it with no drawbacks (imagined or real).
 It's important to distinguish between "decorated" and regular `auto`, see below.
+
+I can personally attest to this: porting an `auto`-heavy UE4 codebase to UE5
+highlighted and prevented a lot of implicit float-double conversions
+(performance) that would have had issues when converting large LWC coordinates
+beyond the old WORLD_MAX (correctness, maintainability), something that Epic has
+been manually tracking down and fixing for multiple 5.x releases.
 
 `auto` is completely harmless when the type is obvious, and even on the same line:
 
@@ -216,14 +222,19 @@ If you're hitting mysterious assertions, consider using the STL version.
 
 ### std::move / std::forward
 
-`MoveTemp` is a great replacement for `std::move` because it enforces move
-semantics with a `static_assert`.
+`MoveTemp` ~~is~~was a great replacement for `std::move` because it enforces
+move semantics with a `static_assert`.
 On the other hand `MoveTempIfPossible` is exactly like `std::move`.
 
 `std::forward` and `Forward` are equivalent.
 
 For all of these, the STL versions use `static_cast` while the UE ones use
 C-style casts.
+
+_Update: MSVC in VS2022 17.5 has
+[added intrinsics](https://devblogs.microsoft.com/cppblog/improving-the-state-of-debug-performance-in-c)
+for std::move and std::forward that greatly improve performance in debug builds,
+making this choice less obvious._
 
 ### Miscellaneous
 
