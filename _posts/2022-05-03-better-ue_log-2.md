@@ -1,6 +1,7 @@
 ---
 title:  "A better UE_LOG, part 2"
 excerpt: "Taking logging to the next level with new C++ features."
+last_modified_at: 2023-02-24
 ---
 
 **Part 1 is [HERE](/2022/04/28/better-ue_log.html)**
@@ -199,6 +200,9 @@ void FillArgs(FStringFormatOrderedArguments& Args, F&& First, R&&... Rest)
 
 It's not the nicest thing to read, but at least it's compact and self-contained.
 Combine with fold expression lambdas to taste.
+
+_If you're from the future and using C++23, you can use `static_assert(false)`
+directly, without the `requires` hack._
 
 ## \_\_VA\_OPT\_\_
 
