@@ -2,7 +2,7 @@
 title:  "Should I follow the Epic coding standard?"
 excerpt: "Things that I wish I knew when I started and had to learn the hard way.
 This one will be controversial!"
-last_modified_at: 2022-11-16
+last_modified_at: 2023-02-24
 ---
 
 This one will be controversial but I really wish someone told me all of this.
@@ -204,14 +204,19 @@ improves its performance (also applies to `TWeakPtr`/`std::weak_ptr`).
 
 ### std::move / std::forward
 
-`MoveTemp` is a great replacement for `std::move` because it enforces move
-semantics with a `static_assert`.
+`MoveTemp` ~~is~~was a great replacement for `std::move` because it enforces
+move semantics with a `static_assert`.
 On the other hand `MoveTempIfPossible` is exactly like `std::move`.
 
 `std::forward` and `Forward` are equivalent.
 
 For all of these, the STL versions use `static_cast` while the UE ones use
 C-style casts.
+
+_Update: MSVC in VS2022 17.5 has
+[added intrinsics](https://devblogs.microsoft.com/cppblog/improving-the-state-of-debug-performance-in-c)
+for std::move and std::forward that greatly improve performance in debug builds,
+making this choice less obvious._
 
 ### Miscellaneous
 
