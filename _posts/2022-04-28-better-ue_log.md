@@ -1,9 +1,10 @@
 ---
 title:  "A better UE_LOG"
 excerpt: "Step 1 of a journey towards hopefully better logging in Unreal Engine."
+last_modified_at: 2023-03-21
 ---
 
-**Part 2 is [HERE](/2022/05/03/better-ue_log-2.html)**
+**[Part 2→](/2022/05/03/better-ue_log-2.html)**
 
 This post assumes that you're already familiar with the various UE logging
 facilities such as `UE_LOG` or `GEngine->AddOnScreenDebugMessage` and examines
@@ -275,6 +276,26 @@ struct FMyLog // Usage: FMyLog(TEXT("Hello {0}")) << i;
         // UE_LOG, etc.
     }
 };
+```
+
+If you want to use `std::format` with the Microsoft STL, as of writing you'll
+need to apply a hack to expose a few things to `namespace std` that
+[should be there already](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2508r1.html).
+
+```c++
+#if defined(_MSVC_STL_VERSION) && __cpp_lib_format <= 202110L
+namespace std
+{
+    template<typename CharT, typename... Args>
+    using basic_format_string = _Basic_format_string<CharT, Args...>;
+
+    template<typename... Args>
+    using format_string = _Fmt_string<Args...>;
+
+    template<typename... Args>
+    using wformat_string = _Fmt_wstring<Args...>;
+}
+#endif
 ```
 
 ## Appendix B: `LexToString` solution
