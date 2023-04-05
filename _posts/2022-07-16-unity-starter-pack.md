@@ -1,7 +1,7 @@
 ---
 title:  "Unity to Unreal starter pack"
 excerpt: "A small collection of things that I wish I was told when I jumped ship."
-last_modified_at: 2023-01-14
+last_modified_at: 2023-04-05
 ---
 
 It seems that
@@ -73,7 +73,7 @@ you're working on the engine itself instead of being limited to a sandbox.
 The sandbox is BP and it provides a similar rapid iteration workflow.
 
 There are QoL tools that attempt to do some form of hot reloading, one of which
-is [broken](http://www.hotreloadsucks.com), and the
+is [broken](https://horugame.com/dont-use-hot-reload-in-ue4), and the
 [other one](https://docs.unrealengine.com/5.0/en-US/using-live-coding-to-recompile-unreal-engine-applications-at-runtime/) is unstable.
 Feel free to use Live Coding, but you'll need some time to get used to working
 with this style of development—you'll get some number of successful reloads
