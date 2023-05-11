@@ -1,11 +1,16 @@
 ---
 title:  "A better UE_LOG, part 2"
 excerpt: "Taking logging to the next level with new C++ features."
-last_modified_at: 2023-03-21
+last_modified_at: 2023-05-11
 ---
 
 **[←Part 1](/2022/04/28/better-ue_log.html)**,
 **[Part 3→](/2023/03/21/better-ue_log-3.html)**
+
+**Update: UE_LOGFMT fixes most of the issues with UE_LOG.
+These techniques can still be useful if you want something more comfortable to use.**
+
+---
 
 In part 2, we'll revisit the logging system made in part 1 and look into how it
 can be made better using new C++ features. UE4 can relatively easily be switched
