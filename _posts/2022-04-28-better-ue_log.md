@@ -1,10 +1,15 @@
 ---
 title:  "A better UE_LOG"
 excerpt: "Step 1 of a journey towards hopefully better logging in Unreal Engine."
-last_modified_at: 2023-03-21
+last_modified_at: 2023-05-11
 ---
 
 **[Part 2→](/2022/05/03/better-ue_log-2.html)**
+
+**Update: UE_LOGFMT fixes most of the issues with UE_LOG.
+These techniques can still be useful if you want something more comfortable to use.**
+
+---
 
 This post assumes that you're already familiar with the various UE logging
 facilities such as `UE_LOG` or `GEngine->AddOnScreenDebugMessage` and examines

@@ -1,9 +1,15 @@
 ---
 title:  "A better UE_LOG, part 3"
 excerpt: "Expanding on logging to provide debug switches with zero shipping overhead."
+last_modified_at: 2023-05-11
 ---
 
 **[←Part 2](/2022/05/03/better-ue_log-2.html)**
+
+**Update: UE_LOGFMT fixes most of the issues with UE_LOG.
+These techniques can still be useful if you want something more comfortable to use.**
+
+---
 
 So far, we've replaced the fragile, legacy nightmare of `FString::Printf` with
 a modern, type-safe formatter suited to your taste that can be used with UE_LOG
