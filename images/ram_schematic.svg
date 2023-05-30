@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 791 491">
+  <path fill="#ccc" stroke="#ccc" stroke-miterlimit="10" d="m11 60 7-3-2 3 2 4Zm158 60-7 4 2-4-2-3Z"/>
+  <path fill="#ccc" stroke="#ccc" stroke-miterlimit="10" d="m221 390 7-3-2 3 2 4Zm78 0-7 4 2-4-2-3Z"/>
+  <path fill="#ccc" stroke="#ccc" stroke-miterlimit="10" d="m221 440 7-3-2 3 2 4Zm89-19 4 7-4-2-3 2Z"/>
+  <path fill="#ccc" stroke="#ccc" stroke-miterlimit="10" d="m299 370-7 4 2-4-2-3Zm-69-169 4 7-4-2-3 2Z"/>
+  <path fill="#ccc" stroke="#ccc" stroke-miterlimit="10" d="m451 160 7-3-2 3 2 4Zm148 0-7 4 2-4-2-3Z"/>
+  <path fill="#ccc" stroke="#ccc" stroke-miterlimit="10" d="m451 190 7-3-2 3 2 4Zm148-20-7 4 2-4-2-3Z"/>
+  <path fill="#ccc" stroke="#ccc" stroke-miterlimit="10" d="m451 230 7-3-2 3 2 4Zm148-50-7 4 2-4-2-3Z"/>
+  <path fill="#FFF" stroke="#000" d="M70 290h150v20H70z"/>
+  <path fill="#FFF" stroke="#000" d="M170 90h80v110h-80z"/>
+  <path fill="#FFF" stroke="#000" d="M440 100h10v30h-10z"/>
+  <path fill="#FFF" stroke="#000" d="M580 100h30v30h-30zm40 0h30v30h-30zm40 0h30v30h-30zm40 30h30v30h-30zm0 40h30v30h-30zm0 40h30v30h-30zm-80 30h30v30h-30zm40 0h30v30h-30z"/>
+  <path fill="#FFF" stroke="#ccc" d="M0 40h10v30H0z"/>
+  <path fill="#FFF" stroke="#ccc" d="M70 380h150v20H70z"/>
+  <path fill="#FFF" stroke="#ccc" d="M70 430h150v20H70z"/>
+  <path fill="#FFF" stroke="#ccc" d="M300 360h65v60h-65z"/>
+  <path fill="#FFF" stroke="#ccc" d="M340 20h10v240h-10zm100 120h10v30h-10z"/>
+  <path fill="#FFF" stroke="#ccc" d="M440 180h10v30h-10zm0 40h10v30h-10z"/>
+  <path fill="none" stroke="#000" d="M0 0h400v490H0z"/>
+  <path fill="none" stroke="#000" stroke-dasharray="3 3" stroke-miterlimit="10" d="M223 300h287"/>
+  <path fill="none" stroke="#000" stroke-miterlimit="10" d="M200 234v-28"/>
+  <path fill="none" stroke="#000" stroke-miterlimit="10" d="M256 145h98"/>
+  <path fill="#FFF" stroke="#ccc" d="M300 20h10v240h-10z"/>
+  <path fill="none" stroke="#000" stroke-miterlimit="10" d="M256 120h58"/>
+  <path fill="none" stroke="#000" stroke-miterlimit="10" d="M440 80h350v200H671v30H510v-30h-70Z"/>
+  <path fill="none" stroke="#000" stroke-miterlimit="10" d="M456 120h24v30h114"/>
+  <path fill="none" stroke="#000" stroke-miterlimit="10" d="M550 304v-94h44"/>
+  <path fill="none" stroke="#000" stroke-miterlimit="10" d="M605 140v-10m30 10v-10m40 10v-10m25 15h-10m10 40h-10m10 40h-10m-15 15v-10m-40 10v-10"/>
+  <path fill="none" stroke="#000" stroke-miterlimit="10" d="M90 284V145h74"/>
+  <path fill="none" stroke="#ccc" stroke-miterlimit="10" d="M16 60h74v60h74"/>
+  <path fill="none" stroke="#ccc" stroke-miterlimit="10" d="M226 390h68"/>
+  <path fill="none" stroke="#ccc" stroke-miterlimit="10" d="M226 440h84v-14"/>
+  <path fill="none" stroke="#ccc" stroke-miterlimit="10" d="M294 370h-64V206"/>
+  <path fill="none" stroke="#ccc" stroke-miterlimit="10" d="M456 160h138"/>
+  <path fill="none" stroke="#ccc" stroke-miterlimit="10" d="M456 190h24v-20h114"/>
+  <path fill="none" stroke="#ccc" stroke-miterlimit="10" d="M456 230h34v-50h104"/>
+  <path stroke="#000" stroke-miterlimit="10" d="m90 289-3-7 3 2 4-2Zm79-144-7 4 2-4-2-3Z"/>
+  <path stroke="#000" stroke-miterlimit="10" d="m200 239-3-7 3 2 4-2Zm0-38 4 7-4-2-3 2Z"/>
+  <path stroke="#000" stroke-miterlimit="10" d="m251 120 7-4-2 4 2 3Zm68 0-7 3 2-3-2-4Z"/>
+  <path stroke="#000" stroke-miterlimit="10" d="m251 145 7-4-2 4 2 3Zm108 0-7 3 2-3-2-4Z"/>
+  <path stroke="#000" stroke-miterlimit="10" d="m451 120 7-3-2 3 2 4Zm148 30-7 4 2-4-2-3Z"/>
+  <path stroke="#000" stroke-miterlimit="10" d="m550 309-3-7 3 2 4-2Zm49-99-7 4 2-4-2-3Z"/>
+  <path fill="#FFF" stroke="#000" d="M140 240h152v40H140z"/>
+  <path fill="#FFF" stroke="#000" d="M320 20h10v240h-10zm40 0h10v240h-10zm240 120h90v90h-90z"/>
+  <text x= "70" y= "52" font-family="Helvetica" font-size="12" text-anchor="middle">HDMI/DisplayPort</text>
+  <text x="145" y="304" font-family="Helvetica" font-size="12" text-anchor="middle">PCIe</text>
+  <text x="145" y="394" font-family="Helvetica" font-size="12" text-anchor="middle">PCIe</text>
+  <text x="145" y="444" font-family="Helvetica" font-size="12" text-anchor="middle">PCIe</text>
+  <text x="210" y="149" font-family="Helvetica" font-size="12" text-anchor="middle">CPU</text>
+  <text x="216" y="264" font-family="Helvetica" font-size="12" text-anchor="middle">NVMe</text>
+  <text x="333" y="394" font-family="Helvetica" font-size="12" text-anchor="middle">Chipset</text>
+  <text x="385" y="146" font-family="Helvetica" font-size="12" text-anchor="middle" transform="rotate(-90 385 143)">RAM</text>
+  <text x="430" y="177" font-family="Helvetica" font-size="12" text-anchor="middle" transform="rotate(-90 430 175)">HDMI/DP</text>
+  <text x="590" y="304" font-family="Helvetica" font-size="12" text-anchor="middle">PCIe</text>
+  <text x="645" y="189" font-family="Helvetica" font-size="12" text-anchor="middle">GPU</text>
+  <text x="708" y="116" font-family="Helvetica" font-size="12" text-anchor="middle" transform="rotate(45 708 112)">VRAM</text>
+</svg>
