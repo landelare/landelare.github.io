@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2023-01-15
+last_modified_at: 2023-06-11
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -186,26 +186,50 @@ Otherwise it's a longer path relative to the Build.cs file.
 
 # [Compiling](https://xkcd.com/303/)
 
-Unreal Engine comes with not one but two methods to live patch C++ code while
-the editor is running, and both are broken in different ways. 🎉
+Launching your project via the .uproject file runs the `Development Editor`
+configuration.
+By default, Unreal will check if a build for this _exists_, but not if it's _up
+to date_.
+This is the source of many "why is my code not doing what it should?" issues,
+serialization errors, possible data corruption, etc.
+[This setting](/2022/09/27/tips-and-tricks.html#automatically-update-c-binaries)
+helps to avoid running with outdated binaries.
+
+To update C++ code while the editor is running, Unreal Engine comes with not one,
+but two methods for live patching, and both are broken in different ways. 🎉
 
 **It's recommended to have Live Coding ON and reinstancing OFF as safe settings,
 which will prevent accidental Hot Reloads even if you do not use Live Coding.**
 
-The only 100% reliable and stable method of building code changes is treating
-Unreal like you would any other C++ program and quitting it before compiling.
-Launching it for debugging from your IDE of choice is the best workflow for this.
+Note that restarting the editor is not enough to get back to a clean state if
+you used either of these.
+You'll need to build (not rebuild, it's a waste of CPU time) **while Unreal is
+closed**.
 
-This also means not using the editor's built-in C++ class wizard since it needs
-to be closed to compile that C++ class.
+The only 100% reliable and stable method of building C++ is treating Unreal like
+you would any other C++ program and compiling while it's **NOT** running.
+Launching it for debugging from your IDE of choice is the best workflow for
+this, as it avoids both outdated binaries (assuming your IDE is set to build
+before running), and one method of triggering Hot Reload.
+
+Don't use Unreal's built-in C++ class wizard, it tries to compile and load the
+new class "live".
+There's a setting to disable this, but the editor needs to be closed in order to
+compile the new class safely anyway.
 Use an "add Unreal class" feature from your IDE instead.
+[This section](#development-environment) has a few suggestions for both paid and
+free addons with such functionality, in case you scrolled past it.
+Ultimately, you're just creating two text files and compiling; anything will do.
 
 Launching in a debugger has the added benefit of immediately catching rare
 issues that sadly do happen during development.
 I have regretted **NOT** running in a debugger on multiple occasions.
-
-Note that restarting the editor is not enough to get back to a clean state.
-You'll need to build (not rebuild) **while Unreal is closed**.
+The Epic crash reporter will grab your call stack, but you'll lose runtime
+state.
+I'm personally using `DebugGame Editor` as my daily driver configuration, but
+there's nothing wrong with `Development Editor` either.
+It runs somewhat faster, helps keep your binaries up-to-date for .uproject
+launches while you unlearn to do that, but it's less reliable for debugging.
 
 ## Hot Reload
 {:.no_toc}
