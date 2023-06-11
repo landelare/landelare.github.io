@@ -1,7 +1,7 @@
 ---
 title: "Assorted tips and tricks"
 excerpt: "A small collection of hidden settings."
-last_modified_at: 2023-01-05
+last_modified_at: 2023-06-11
 ---
 
 This will be nothing new for you if you've read
@@ -42,6 +42,17 @@ outdated. For developers the easy "fix" is to always launch the editor from VS.
 If you have settings in Saved, those take precedence so check there if it
 doesn't seem to have an effect. That's EditorPerProjectUserSettings.ini without
 Default in its name.
+
+<sup>
+This regressed in UE5: the popup that would show compilation progress in UE4
+doesn't appear anymore.
+As of writing, this is not fixed yet.
+The current version is 5.2.0.
+Your project will look like it's not launching, but you can observe high CPU
+usage while your code is otherwise compiling in the background normally.
+You will get either the editor splash screen, or a message box with an error
+eventually.
+</sup>
 
 # Restore camera after Play-In-Editor
 
