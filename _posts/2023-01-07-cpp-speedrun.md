@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2023-06-11
+last_modified_at: 2023-07-17
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -84,12 +84,21 @@ isn't considered suitable.
 
 These three options are known to actually work and provide a usable workflow,
 listed in no particular order:
-* [Visual Assist](https://www.wholetomato.com) (Whole Tomato)
+* ~~[Visual Assist](https://www.wholetomato.com) (Whole Tomato)~~
 * [ReSharper](https://www.jetbrains.com/resharper-cpp/) (JetBrains)
 * [Rider](https://www.jetbrains.com/rider/) (JetBrains)
 
-The first two are VS extensions, while Rider is an IntelliJ-based IDE that
-contains ReSharper.
+<sup>
+Update: Visual Assist's quality has been declining for a while, and its
+development lags behind the other two products.
+Its users also report the purchasing/renewal process as being annoying.
+The decision between ReSharper and Rider boils down to your preference between
+their respective GUIs and ReSharper being slightly cheaper.
+They can also be bought together in a bundle.
+</sup>
+
+Visual Assist and ReSharper are VS extensions, while Rider is an IntelliJ-based
+IDE that contains ReSharper.
 For Unreal (unlike for Unity) it's not entirely standalone, and it requires at
 least the VS Build Tools to be licensed and installed on Windows as of writing.
 Some of its users opt to install the full Visual Studio and use some of its
