@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2023-07-17
+last_modified_at: 2023-08-13
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -18,7 +18,7 @@ That said,
 series of videos from the official learning site is relatively good, even if the
 title of this course is somewhat misleading.
 
-As of writing, the latest released version is Unreal Engine 5.1.0.
+As of writing, the latest Unreal Engine version is 5.3.0 preview 1.
 
 # Language choice
 
@@ -62,54 +62,109 @@ Not even the engine follows it consistently.
 
 # Development environment
 
-Practically speaking, Windows is the only platform fully supported for
-development.
-Linux and macOS are not first-class citizens for the Editor, but support is
+Windows is the primary (arguably only) platform fully supported for development.
+Linux and macOS do not have Epic's full attention for the Editor, but support is
 better for them as target platforms for shipped games.
 
-Regarding IDEs, there are two main choices.
-As of writing, both require you to have a license for Visual Studio (which may
-be Community).
-Avoid VS2019 and earlier ~~fossils~~versions if you can; VS2022 being 64-bit is
-highly beneficial due to the enormous size of UE5.
-You can still work with a newer editor even if you must use the 2019 toolchain
-to compile.
+There are two practical choices for an IDE, Visual Studio and JetBrains Rider.
+As of writing, Rider on Windows requires you to have a license for Visual Studio
+according to JetBrains (which may be Community if you're eligible).
+For the other two platforms, you're left with only Rider.
+
+Visual Studio is only viable starting from 2022 version 17.7; avoid everything
+earlier.
+Rider gained Unreal support in version 2022.1.
+Visual Studio **Code** is an entirely different product and is considered broken
+for Unreal development.
+CLion, despite being the C\+\+ IDE in the IntelliJ world, does not support
+Unreal.
+
+The decision between Visual Studio and Rider mostly boils down to price and GUI
+preference.
+If your computer has 16 GB of RAM or less, you might also want to consider that
+VS generally uses less RAM than Rider.
+
+VS Community can't be beaten on its zero price, and essentially all of Rider's
+features are available as a VS add-in in the form of ReSharper for slightly
+cheaper.
+If you're not eligible for Community, having a VS license needs to be factored
+into Rider's price on Windows.<br>
+There's also a discounted ReSharper+Rider bundle.
+Some people like using both at the same time, generally preferring Rider for
+editing code and VS for debugging in this case.
+
+Although JetBrains is heavily pushing for subscriptions, perpetual licenses are
+still available in a
+[hybrid scheme](https://sales.jetbrains.com/hc/articles/207240845).
+
+## VS2022
+{:.no_toc}
 
 Out of the box, VS does not understand Unreal macros or the build system, and
-IntelliSense will frequently break, displaying nonsensical errors.
-[Here](https://docs.unrealengine.com/5.1/en-US/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine/#turnofftheerrorlistwindow)'s how to turn
-this off, at least partially.
-Visual Studio **Code** is roughly as broken as VS2022 without extensions and
-isn't considered suitable.
+IntelliSense will often break, displaying nonsensical errors.
+The Error List is essentially useless for Unreal; you'll always want to look at
+the Output panel for the full, unabridged errors.
+[Here](https://docs.unrealengine.com/5.2/en-US/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine/#turnofftheerrorlistwindow)'s
+how to turn it off and prevent it from coming back.
 
-These three options are known to actually work and provide a usable workflow,
-listed in no particular order:
-* ~~[Visual Assist](https://www.wholetomato.com) (Whole Tomato)~~
+While VS2022 17.7 is a massive leap in usability compared to earlier versions,
+it's still not perfectly stable and IntelliSense will sometimes "give up" on
+some files.
+This usually manifests in the files losing highlighting, or getting red
+squigglies on everything.
+To fix this, there are two popular commercially-available extensions that add
+full Unreal support and various other convenience features:
+
 * [ReSharper](https://www.jetbrains.com/resharper-cpp/) (JetBrains)
-* [Rider](https://www.jetbrains.com/rider/) (JetBrains)
+* [Visual Assist](https://www.wholetomato.com) (Whole Tomato)
 
-<sup>
-Update: Visual Assist's quality has been declining for a while, and its
-development lags behind the other two products.
+Visual Assist's quality has been declining for a while, and its development lags
+behind ReSharper.
 Its users also report the purchasing/renewal process as being annoying.
-The decision between ReSharper and Rider boils down to your preference between
-their respective GUIs and ReSharper being slightly cheaper.
-They can also be bought together in a bundle.
-</sup>
-
-Visual Assist and ReSharper are VS extensions, while Rider is an IntelliJ-based
-IDE that contains ReSharper.
-For Unreal (unlike for Unity) it's not entirely standalone, and it requires at
-least the VS Build Tools to be licensed and installed on Windows as of writing.
-Some of its users opt to install the full Visual Studio and use some of its
-features, such as the debugger, while relying on Rider for code editing.
+As such, I cannot recommend it, but if you're already using it, you know what to
+expect.
 
 UE ships with a VS extension called UnrealVS (found in Engine/Extras/UnrealVS),
 which is highly recommended.
+Even for non-Unreal projects, it provides a convenient way to set command-line
+arguments for debugging.
 The third-party
 [Unreal Wizard](https://marketplace.visualstudio.com/items?itemName=Fiquegnima-productions.UnrealWiz)
-extension is also recommended for additional/replacement functionality where
-UnrealVS is broken.
+extension is also strongly recommended for additional/replacement functionality
+where UnrealVS is broken.
+
+Since the .sln that Unreal generates doesn't have real folders in it (only
+"filters"), attempting to create new files using built-in methods will cause
+them to default to somewhere in Intermediate where they won't build.
+Use one of the extensions above to create new files, or create them "raw" in the
+filesystem and regenerate your solution to pick them up.
+
+If you're using VS without Visual Assist or ReSharper, I highly recommend having
+Unreal Wizard's toolbar on your main toolbar for the "Generate Project Files"
+button.
+When IntelliSense breaks, pressing that and reloading often resolves the issue.
+If that doesn't work, the next step is deleting the `.vs` folder in your project.
+
+Check if you have accidentally installed IncrediBuild from the VS installer.
+If you don't have a license and a server farm set up for it, it will only slow
+your builds down, so get rid of it.
+It's also been reported to break shader compilation in this case.
+
+## Rider
+{:.no_toc}
+
+Since Rider contains ReSharper out of the box, it mostly Just Works™.
+Although it can work with Unreal-generated .slns, it also supports opening the
+.uproject file directly as a project, meaning that you'll never need to bother
+with (re-)generating a solution.
+
+The Error List advice from VS partially applies to Rider, as it also likes to
+discard useful parts of error messages in its pretty display.
+Where and how you get to the raw textual output varies between versions and
+the classic/new GUI:
+the button could be "Toggle Console View" next to "Build Output" or
+"Toggle Tree View Mode" to the left of the errors.
+2023.2/new GUI seems to default to showing both, which is a nice compromise.
 
 For Rider,
 [EzArgs](https://plugins.jetbrains.com/plugin/16411-ezargs) can replicate some
@@ -118,11 +173,7 @@ Contrary to Rider's claims in the pop-up that you will almost certainly see, the
 RiderLink plugin is **NOT** required and only provides some minor features.
 It may be used, of course, but if you ever have build errors referring to
 `module rules named 'RD'`, it should be the prime suspect.
-
-Check if you have accidentally installed IncrediBuild.
-If you don't have a license and a server farm set up for it, it will only slow
-your builds down, so get rid of it.
-It's also been reported to break shader compilation in this case.
+The fix is to delete every Rider plugin from your project and/or engine.
 
 # Project structure
 
@@ -144,9 +195,6 @@ Unreal's custom build system.
 As such, it's pointless to try and change compiler/linker/nmake settings in them.
 Unreal's own build tool is the creatively-named UnrealBuildTool (UBT), which
 makes heavy use of the UnrealHeaderTool (UHT) for code generation.
-
-Rider does not need an .sln and can open the .uproject directly, however many of
-its users still opt for an .sln-based workflow.
 
 Your actual build files are the Target.cs and Build.cs files you get when you
 create any starter C++ project template or add a C++ class to a BP-only
