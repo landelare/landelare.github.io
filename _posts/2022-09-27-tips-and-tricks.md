@@ -1,7 +1,7 @@
 ---
 title: "Assorted tips and tricks"
 excerpt: "A small collection of hidden settings."
-last_modified_at: 2023-06-11
+last_modified_at: 2023-09-27
 ---
 
 This will be nothing new for you if you've read
@@ -111,3 +111,14 @@ r.ShaderCompiler.JobCacheDDC=1
 ```
 
 This makes shaders get compiled on demand instead of thousands upfront.
+
+# Use your entire CPU to compile shaders
+
+By default, Unreal throttles itself to around 80% of your CPU to compile shaders.
+To make it use all your CPU to compile faster, add this to DefaultEngine.ini:
+```
+[DevOptions.Shaders]
+NumUnusedShaderCompilingThreads=0
+PercentageUnusedShaderCompilingThreads=0
+WorkerProcessPriority=1
+```
