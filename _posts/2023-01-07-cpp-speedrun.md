@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2023-08-13
+last_modified_at: 2023-10-09
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -491,7 +491,7 @@ detailed below.
 Blueprint classes also have CDOs, but these are only created when the BP is
 loaded.
 
-#### Default subobjects
+#### Default subobjects, components
 {:.no_toc}
 
 Classes might have default subobjects, that is, additional objects that get
@@ -521,10 +521,23 @@ TEXT() is for FString literals.
 Constructors use `->SetupAttachment()` to build component hierarchies.
 
 At runtime, components are made by
-NewObject+RegisterComponent+AddInstanceComponent and attached with the "usual"
-functions that are also available in BP.
+NewObject+RegisterComponent+AddInstanceComponent.
+SetupAttachment may be used only before calling RegisterComponent; after that,
+components are attached with the "usual" functions that are also available in BP.
 Engine code randomly forgets to call AddInstanceComponent, which leads to, e.g.,
 your component existing but not being visible in the inspector.
+
+A BP Construction Script's C++ equivalent is the OnConstruction method, not the
+constructor.
+Components are made with NewObject in this case, and to match BP behavior, you'll
+need to set this flag manually:<br>
+`YourNewComponent->CreationMethod = EComponentCreationMethod::UserConstructionScript;`
+
+There's another "construction script" concept in the engine, called a simple
+construction script.
+This is what contains BP-added components in actor blueprints.
+A BP actor's CDO does **NOT** contain components added this way, unlike C\+\+
+CreateDefaultSubobject.
 
 ## UClass
 
@@ -677,9 +690,12 @@ last corridor.
 
 Note that UPROPERTYs are set **AFTER** your C++ constructor has returned.
 Therefore, you cannot read their values just yet.
-The equivalent for a BP construction script is OnConstruction.
-Various other callbacks are also invoked after properties have been written,
-such as PostInitProperties or PostLoad.
+Various callbacks are invoked after properties have been written, such as
+OnConstruction, PostInitProperties or PostLoad.
+You can use these to react to the new values.
+The editor has additional callbacks for "live" editing of properties in the
+Details panel once an object has been constructed and loaded, such as
+PostEditChangeProperty or PostEditChangeChainProperty.
 
 #### UBlueprint
 {:.no_toc}
