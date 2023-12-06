@@ -2,7 +2,7 @@
 title:  "Should I follow the Epic coding standard?"
 excerpt: "Things that I wish I knew when I started and had to learn the hard way.
 This one will be controversial!"
-last_modified_at: 2023-02-24
+last_modified_at: 2023-12-06
 ---
 
 This one will be controversial but I really wish someone told me all of this.
@@ -40,7 +40,7 @@ there was a gradual slide away from the Epic standards which has led directly to
 bugfixes and cleaner code.
 
 Not all of these items are from Epic's
-[official coding standard](https://docs.unrealengine.com/5.0/en-US/epic-cplusplus-coding-standardblueprint-debugging-in-unreal-engine/).
+[official coding standard](https://docs.unrealengine.com/5.3/en-US/epic-cplusplus-coding-standard-for-unreal-engine/).
 Some are widespread and perhaps misguided/outdated practices that I've seen
 within the community that I'll address without distinguishing between the two.
 
