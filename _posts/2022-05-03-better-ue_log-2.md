@@ -1,7 +1,7 @@
 ---
 title:  "A better UE_LOG, part 2"
 excerpt: "Taking logging to the next level with new C++ features."
-last_modified_at: 2023-05-11
+last_modified_at: 2023-12-22
 ---
 
 **[←Part 1](/2022/04/28/better-ue_log.html)**,
@@ -9,6 +9,9 @@ last_modified_at: 2023-05-11
 
 **Update: UE_LOGFMT fixes most of the issues with UE_LOG.
 These techniques can still be useful if you want something more comfortable to use.**
+
+I have also published a [sample library](https://github.com/landelare/llog) that
+implements some of the ideas presented by this series.
 
 ---
 

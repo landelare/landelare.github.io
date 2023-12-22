@@ -1,13 +1,16 @@
 ---
 title:  "A better UE_LOG, part 3"
 excerpt: "Expanding on logging to provide debug switches with zero shipping overhead."
-last_modified_at: 2023-05-11
+last_modified_at: 2023-12-22
 ---
 
 **[←Part 2](/2022/05/03/better-ue_log-2.html)**
 
 **Update: UE_LOGFMT fixes most of the issues with UE_LOG.
 These techniques can still be useful if you want something more comfortable to use.**
+
+I have also published a [sample library](https://github.com/landelare/llog) that
+implements some of the ideas presented by this series.
 
 ---
 
