@@ -1,13 +1,13 @@
 ---
 title:  "Unity to Unreal starter pack"
 excerpt: "A small collection of things that I wish I was told when I jumped ship."
-last_modified_at: 2023-09-12
+last_modified_at: 2024-01-02
 ---
 
 It seems that
 [recent](https://www.pcgamer.com/unity-is-merging-with-a-company-who-made-a-malware-installer/)
 [news](https://kotaku.com/unity-john-riccitiello-monetization-mobile-ironsource-1849179898)
-[has](https://blog.unity.com/news/plan-pricing-and-packaging-updates)
+[has](/assets/unity-pricing.pdf)
 caused another wave of people leaving Unity for Unreal or at least
 considering a switch and checking things out "on the other side" to see if it's
 worth losing access to all those assets bought over the years.
