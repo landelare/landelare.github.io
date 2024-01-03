@@ -2,7 +2,7 @@
 title:  "Should I follow the Epic coding standard?"
 excerpt: "Things that I wish I knew when I started and had to learn the hard way.
 This one will be controversial!"
-last_modified_at: 2023-12-06
+last_modified_at: 2024-01-03
 ---
 
 This one will be controversial but I really wish someone told me all of this.
@@ -206,6 +206,16 @@ you're OK with adding the extra dependency.
 `std::ranges` improves the begin/end syntax of regular `<algorithm>` (where
 `Algo` remains better) in C++20 but it's more or less incompatible with UE
 containers.
+
+You can get a lot of mileage out of this small adapter function:
+```c++
+#include <span>
+
+auto AsSpan(auto& Container)
+{
+    return std::span(GetData(Container), GetNum(Container));
+}
+```
 
 ### Smart pointers
 
