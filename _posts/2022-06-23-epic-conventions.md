@@ -2,7 +2,7 @@
 title:  "Should I follow the Epic coding standard?"
 excerpt: "Things that I wish I knew when I started and had to learn the hard way.
 This one will be controversial!"
-last_modified_at: 2024-01-03
+last_modified_at: 2024-03-25
 ---
 
 This one will be controversial but I really wish someone told me all of this.
@@ -40,7 +40,7 @@ there was a gradual slide away from the Epic standards which has led directly to
 bugfixes and cleaner code.
 
 Not all of these items are from Epic's
-[official coding standard](https://docs.unrealengine.com/5.3/en-US/epic-cplusplus-coding-standard-for-unreal-engine/).
+[official coding standard](https://dev.epicgames.com/documentation/en-us/unreal-engine/epic-cplusplus-coding-standard-for-unreal-engine).
 Some are widespread and perhaps misguided/outdated practices that I've seen
 within the community that I'll address without distinguishing between the two.
 
@@ -59,12 +59,10 @@ Local variables are probably the strongest contenders for it.
 ## Pointers for UObjects
 
 Reading engine code I soon got the impression that every `UObject` (including
-actors of course) has to be stored and passed around as a pointer.\*
+actors of course) has to be stored and passed around as a pointer (`UObject*`
+originally, then `TObjectPtr<UObject>`).
 Epic code often uses `UObject&`, and `TArray::Sort` even enforces it (but don't
 use that one in particular, see below on `std::sort`).
-
-\*Let's ignore `TObjectPtr<T>` which might or might not go away.
-As of writing it's optional and its existence can be largely ignored.
 
 ## int32
 
@@ -139,8 +137,7 @@ During UE4->UE5 LWC porting a lot of `0.0f`s and `1.0f`s needed to be fixed.
 errors and it's what I would've used in hindsight, especially if it's generic
 code that still needs to support both types.
 Obviously it doesn't apply if you need to select a particular overload.
-Chances are you can also settle on `double`s forever and use `0.0`/`1.0`, but
-there are still `float` to `double` changes happening after UE5.0.
+Chances are you can also settle on `double`s forever and use `0.0`/`1.0`.
 
 ## Structured bindings
 
@@ -265,14 +262,16 @@ They got better in UE5 but there are still STL-exclusive features (like
 a working `operator==`...) and they have started becoming STL hybrids themselves
 due to language features being defined in terms of `std::tuple_size`,
 (lower-case) `get<i>()`, etc.
-~~Since there's no BP or reflection support for these it's worth considering not
-using them at all.~~<br>
-_UE5.1 update: These now have FArchive support, which makes the decision less
-straightforward._
+On the other hand, they have FArchive support, which means the best one to
+choose depends on usage.
 
-`TFunction` has some bugs (as of 5.0.2) related to perfect forwarding and who
-knows where else. I stopped looking when my crashes got fixed by nothing but
-changing it to `std::function` which is an all-around better replacement.
+`TFunction` has (or had) some bugs related to perfect forwarding, and who knows
+where else.
+I stopped looking when my crashes got fixed by nothing but changing it to
+`std::function`, which is an all-around better replacement.
+
+`TOptional` only received BP support in 5.4, if you're sticking with 5.3 due to
+the licensing changes, it's pointless.
 
 ## const locals and parameters
 
