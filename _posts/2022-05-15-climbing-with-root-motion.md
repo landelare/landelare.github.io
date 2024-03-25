@@ -1,9 +1,10 @@
 ---
 title:  "Climbing with root motion"
 excerpt: "Some ideas on how to dynamically adapt climbing animations."
+last_modified_at: 2024-03-25
 ---
 
-[Advanced Locomotion System](https://www.unrealengine.com/marketplace/en-US/product/advanced-locomotion-system-v1)
+[Advanced Locomotion System](https://www.unrealengine.com/marketplace/product/advanced-locomotion-system-v1)
 on the Marketplace has some really cool basic locomotion features that can serve
 as an inspiration for your own game.
 In this article we'll look a little into its "Mantle System".
