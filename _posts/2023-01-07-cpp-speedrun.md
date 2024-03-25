@@ -1,12 +1,13 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2023-10-09
+last_modified_at: 2024-03-25
 ---
 
 This article assumes significant experience with C++, but not necessarily within
 the Unreal Engine ecosystem.
-Some C# is also required.
+Some C# is also required, which is used for Unreal tooling, such as the build
+system and code generators.
 
 Although most of your knowledge will carry right into Unreal, there's a lot that
 I had to find out the hard way.
@@ -17,8 +18,6 @@ That said,
 [this](https://dev.epicgames.com/community/learning/courses/KJ/converting-blueprint-to-c/)
 series of videos from the official learning site is relatively good, even if the
 title of this course is somewhat misleading.
-
-As of writing, the latest Unreal Engine version is 5.3.0 preview 1.
 
 # Language choice
 
@@ -36,29 +35,27 @@ really looking for, and are often found by searching for `ExampleName` or
 It's very common to build a C++ base class and a BP subclass together that
 form a single logical unit, especially with actor classes.
 C++ is great at core architecture, performance, and being source controlled;
-BP is great at asset references, visuals, ease of programming, fast iteration,
-and async code.
-Good luck replicating a Timeline node in C++ without special extensions such
-as C++20 <!--♪-->coroutines<!--♫-->.
-It's far simpler to define a BlueprintImplementableEvent (more on this later)
-and call it from C++.
+BP is great at asset references, visuals, ease of programming for non-technical
+people, and fast iteration.
 
 Since BP is essentially unmergeable, you'll need to consider this for your
 version control setup.
-The most common approach is to use exclusive checkouts and file locks.
+The most common approach is to use exclusive checkouts and file locks, although
+good team communication scales surprisingly well.
 
 There is a thing as too much C++.
 Do not ever hardcode an asset path into C++, these often lead to broken
 references and packaging errors.
 This includes a total ban on `ConstructorHelpers` and similar functionality.
 Configuration is also better done using the engine's functionality instead of
-piles of #defines.
+piles of #defines or constexpr values in headers.
 
 There's an official
-[coding standard](https://docs.unrealengine.com/5.1/en-US/epic-cplusplus-coding-standard-for-unreal-engine/).
+[coding standard](https://dev.epicgames.com/documentation/en-us/unreal-engine/epic-cplusplus-coding-standard-for-unreal-engine).
 It's relatively unusual in that it overuses PascalCase to the extreme.
 Some studios follow it, some don't; both approaches have merit.
 Not even the engine follows it consistently.
+I wrote a [separate article](/2022/06/23/epic-conventions.html) on this topic.
 
 # Development environment
 
@@ -104,16 +101,17 @@ Out of the box, VS does not understand Unreal macros or the build system, and
 IntelliSense will often break, displaying nonsensical errors.
 The Error List is essentially useless for Unreal; you'll always want to look at
 the Output panel for the full, unabridged errors.
-[Here](https://docs.unrealengine.com/5.2/en-US/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine/#turnofftheerrorlistwindow)'s
+[Here](https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine#turnofftheerrorlistwindow)'s
 how to turn it off and prevent it from coming back.
 
-While VS2022 17.7 is a massive leap in usability compared to earlier versions,
-it's still not perfectly stable and IntelliSense will sometimes "give up" on
-some files.
-This usually manifests in the files losing highlighting, or getting red
+While VS2022 17.9 sports some official support for Unreal Engine projects, it's
+very limited (working on custom engine builds of 5.4+ only), and it's still not
+perfectly stable.
+IntelliSense will sometimes "give up" on some files:
+this usually manifests in the files losing highlighting, or getting red
 squigglies on everything.
 To fix this, there are two popular commercially-available extensions that add
-full Unreal support and various other convenience features:
+full Unreal support and various other convenience features that work with .sln:
 
 * [ReSharper](https://www.jetbrains.com/resharper-cpp/) (JetBrains)
 * [Visual Assist](https://www.wholetomato.com) (Whole Tomato)
@@ -150,6 +148,12 @@ If you don't have a license and a server farm set up for it, it will only slow
 your builds down, so get rid of it.
 It's also been reported to break shader compilation in this case.
 
+The official VS Unreal plugin ("IDE support for Unreal Engine") is more annoying
+than useful.
+If it's giving you errors, you may freely uninstall it.
+It's not really needed for anything substantial, especially if you're running
+ReSharper.
+
 ## Rider
 {:.no_toc}
 
@@ -157,6 +161,7 @@ Since Rider contains ReSharper out of the box, it mostly Just Works™.
 Although it can work with Unreal-generated .slns, it also supports opening the
 .uproject file directly as a project, meaning that you'll never need to bother
 with (re-)generating a solution.
+This is the preferred approach.
 
 The Error List advice from VS partially applies to Rider, as it also likes to
 discard useful parts of error messages in its pretty display.
@@ -175,6 +180,8 @@ It may be used, of course, but if you ever have build errors referring to
 `module rules named 'RD'`, it should be the prime suspect.
 The fix is to delete every Rider plugin from your project and/or engine.
 
+It's similar to the VS IDE support for Unreal Engine plugin in this respect.
+
 # Project structure
 
 When you create a new Unreal project, you're given a set of options, notably
@@ -189,25 +196,35 @@ Projects with a Source folder can return to being BP only by deleting Source and
 editing the .uproject file (which is JSON) to no longer refer to the modules
 that are now gone.
 
-The generated Visual Studio solution and its accompanying vcxprojs exist only
-for IDE compatibility and are not used in the build process aside from invoking
-Unreal's custom build system.
-As such, it's pointless to try and change compiler/linker/nmake settings in them.
+BP classes are considered content, but C++ classes are not.
+As a result, the Unreal editor's "C++ Classes" folder in the Content Browser is
+mostly useless and should be ignored.
+This distinction is also relevant for loading them: BP classes are loaded like
+any other content, while all C++ classes are immediately available when their
+module loads, usually but not necessarily at project startup.
+
+## C++ modules
+{:.no_toc}
+
+The generated Visual Studio solution and its accompanying vcxprojs are "fake",
+and exist only for IDE compatibility.
+They're not used in the build process aside from invoking Unreal's custom build
+system, it's pointless to try and change compiler/linker/nmake settings in them.
 Unreal's own build tool is the creatively-named UnrealBuildTool (UBT), which
 makes heavy use of the UnrealHeaderTool (UHT) for code generation.
 
 Your actual build files are the Target.cs and Build.cs files you get when you
 create any starter C++ project template or add a C++ class to a BP-only
 project.
-[Here](https://docs.unrealengine.com/5.1/en-US/unreal-engine-modules/)'s the
-official documentation on them.
+[Here](https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-modules)'s
+the official documentation on them.
 
 Target.cs files govern building your entire project.
-Targets are things such as editor, standalone, dedicated server.
+Targets are things such as editor, standalone, or dedicated server.
 These get mixed with the familiar "debug" and "release" configurations (but more
 nuanced in Unreal) to form your overall list of project configurations.
 See the documentation
-[here](https://docs.unrealengine.com/5.1/en-US/build-configurations-reference-for-unreal-engine/).
+[here](https://dev.epicgames.com/documentation/en-us/unreal-engine/build-configurations-reference-for-unreal-engine).
 
 Build.cs files govern an individual module (.dll or static lib, C++20 modules
 are not supported or used), not unlike .asmdefs in Unity.
@@ -224,22 +241,34 @@ build settings.
 Approaches to manage this include adding extra functionality to Target.cs files
 or defining an empty C++ module for nothing else but its C# functionality.
 
-Modules may be part of your project directly or belong to plugins.
-In addition to modules, plugins may also contain content (assets, blueprints)
-and have extra control for being toggled and their loading order in the
-corresponding .uplugin file.
-Content-only plugins are also possible and all plugins may be installed directly
-into the engine and shared between projects.
-
-BP classes are considered content, but C++ classes are not.
-As a result, the Unreal editor's "C++ Classes" folder in the Content Browser is
-mostly useless and should be ignored.
-
 The Public/Private folder structure commonly seen is a convention directly
 supported by the build system and the editor, but it's not strictly required.
 Include paths default to a module's Public folder when it's added as a
 dependency.
 Otherwise it's a longer path relative to the Build.cs file.
+
+## Plugins
+{:.no_toc}
+
+Modules may be part of your project directly or belong to plugins.
+In addition to modules, plugins may also contain content (assets, blueprints)
+just like your project, and have extra control for being toggled, and their
+loading order in the corresponding .uplugin file.
+Content-only plugins are also possible and all plugins may be installed directly
+into the engine and shared between projects.
+
+If a plugin exists in both the engine and a project, the one in the project
+takes precedence.
+This is useful to, e.g., apply fixes to engine plugins without having to
+build an entire custom engine.
+The drawback is that you're now responsible for keeping that plugin up-to-date
+with future engine versions.
+
+Generally, your project depends on generic plugins, but this is reversed in the
+case of game feature plugins: these plugins are "backwards", and they depend on
+your project to extend it without the project knowing.
+They can, e.g., inject additional components into actors to run a seasonal event
+(think Fortnite).
 
 # [Compiling](https://xkcd.com/303/)
 
@@ -257,6 +286,7 @@ but two methods for live patching, and both are broken in different ways. 🎉
 
 **It's recommended to have Live Coding ON and reinstancing OFF as safe settings,
 which will prevent accidental Hot Reloads even if you do not use Live Coding.**
+You can also explicitly disable Hot Reload.
 
 Note that restarting the editor is not enough to get back to a clean state if
 you used either of these.
@@ -271,9 +301,8 @@ before running), and one method of triggering Hot Reload.
 
 Don't use Unreal's built-in C++ class wizard, it tries to compile and load the
 new class "live".
-There's a setting to disable this, but the editor needs to be closed in order to
-compile the new class safely anyway.
-Use an "add Unreal class" feature from your IDE instead.
+The editor needs to be closed in order to compile the new class safely anyway,
+use an "add Unreal class" feature from your IDE instead.
 [This section](#development-environment) has a few suggestions for both paid and
 free addons with such functionality, in case you scrolled past it.
 Ultimately, you're just creating two text files and compiling; anything will do.
@@ -410,7 +439,7 @@ You mostly create them with `NewObject<T>` or `CreateDefaultSubobject<T>`.
 The most important subclass of UObject is AActor, it even has its own class
 prefix.
 AActors have a
-[complex lifecycle](https://docs.unrealengine.com/5.1/en-US/unreal-engine-actor-lifecycle/)
+[complex lifecycle](https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-actor-lifecycle)
 that goes beyond mere garbage collection and reachability analysis, and even
 come with their own creation function, `UWorld::SpawnActor`.
 
@@ -426,17 +455,17 @@ setting UPROPERTY pointers pointing to them to nullptr when they're garbage
 collected.
 This also applies to destroyed actors, but there's a newer GC operation mode
 where this is no longer the case.
-The new mode fixes some issues such as formerly-different TMap keys now all
-being nullptr.
-Currently, this is opt-in with the inversely-named gc.PendingKillEnabled 0
-setting, with Lyra notably opting in.
-Epic employees on social media hinted that this would eventually become the
-default GC behavior.
-It's worth considering this if you're starting a new project, as it has fewer
-surprises in store and will save you porting work if/when the engine switches.
+The new mode fixes some issues, such as formerly-different TMap keys now all
+being nullptr in a container that does not support multiple keys.
+This is opt-in with the inversely-named gc.PendingKillEnabled 0 setting, with
+Lyra notably opting in ([/Script/Engine.GarbageCollectionSettings]
+gc.PendingKillEnabled=False).
+5.4 renamed the setting to gc.GarbageEliminationEnabled.
+It's worth considering setting this if you're starting a new project, as it has
+fewer surprises in store.
 </sub>
 
-See [Lyra](https://docs.unrealengine.com/5.1/en-US/lyra-sample-game-in-unreal-engine/)
+See [Lyra](https://dev.epicgames.com/documentation/en-us/unreal-engine/lyra-sample-game-in-unreal-engine)
 itself.
 
 ### Object pointers
@@ -445,10 +474,15 @@ There are smart pointers that let you reference UObjects from a "regular" C++
 object that cannot have `UPROPERTY`s.
 These all have `Object` in their names, such as `TStrongObjectPtr<T>`,
 `TWeakObjectPtr<T>`, but **NOT** `TObjectPtr<T>`.
-TObjectPtr has no runtime effect in shipped projects, where it is equivalent to
-a `T*` raw pointer.
-It is optional (and cumbersome) to use and its existence can be ignored.
-It supposedly has some nebulous benefits in the editor only.
+As an exception, TObjectPtr is not smart: it has no runtime effect in shipped
+projects, where it is equivalent to a `T*` raw pointer.
+
+TObjectPtr is used for UPROPERTYs only (writing `UPROPERTY()` is still required),
+function parameters and return values are still `UObject*`.
+This makes things complicated when, e.g., you need a `UObject*&`, but only have a
+TObjectPtr.
+The usual way engine code works around itself is by using a temporary UObject\*
+for the reference, that is then assigned to the TObjectPtr.
 
 Classes with only `Ptr` such as `TSharedPtr` or `TUniquePtr` are reinventions of
 their STL counterparts (with varying levels of quality...) and work with common
@@ -675,9 +709,8 @@ values to UPROPERTYs.
 This is most commonly done through literal blueprints (e.g., actor subclasses),
 but there are other similar systems to achieve this, such as UDeveloperSettings.
 
-Raw pointers (including TObjectPtr, which is mostly useless) are force loaded
-before you have a chance to read them, while soft pointers (TSoftObjectPtr) are
-loaded on demand by your code.
+Raw pointers and TObjectPtr are force loaded before you have a chance to read
+them, while soft pointers (TSoftObjectPtr) are loaded on demand by your code.
 Soft pointers store a path to the asset and act as weak pointers after they've
 been loaded.
 
@@ -794,7 +827,7 @@ This is great for small tasks (usually within a frame) but avoid overloading
 these threads, or you'll compete with the engine.
 
 There's a newer frontend to the low-level tasks system called
-[UE\:\:Tasks](https://docs.unrealengine.com/5.1/en-US/tasks-systems-in-unreal-engine/),
+[UE\:\:Tasks](https://dev.epicgames.com/documentation/en-us/unreal-engine/tasks-systems-in-unreal-engine),
 which is relatively unused by engine systems, mostly due to its relative youth.
 It has a better API for chaining, dependencies, etc.
 
@@ -834,8 +867,8 @@ Useful things that don't really fit any other category.
 
 Unreal comes with a rich set of assertion macros, none having `assert` in their
 names.
-[Here](https://docs.unrealengine.com/5.1/en-US/asserts-in-unreal-engine/) is the
-official documentation.
+[Here](https://dev.epicgames.com/documentation/en-us/unreal-engine/asserts-in-unreal-engine)
+is the official documentation.
 
 It often surprises people that the "Slow" assertion macros do **NOT** run in
 DebugGame configurations, only full Debug.
@@ -891,8 +924,8 @@ FNames on steroids that are hierarchical and can be defined in advance so that
 you don't have to keep typing strings and hoping you don't get one of them wrong.
 Although it's commonly used in conjunction with GAS, it's an independent system.
 
-Here's the official
-[documentation](https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/Tags/).
+[Here](https://dev.epicgames.com/documentation/en-us/unreal-engine/using-gameplay-tags-in-unreal-engine)'s
+the official documentation.
 
 ## BindWidget
 {:.no_toc}
@@ -904,7 +937,7 @@ UPROPERTY by name.
 
 # Useful links for reference
 
-|[String-like classes](https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/StringHandling/)|[Assorted tips and tricks](/2022/09/27/tips-and-tricks.html)|[Debug BP call stack from C++](https://www.unrealengine.com/en-US/tech-blog/debugging-ufunction-invoke)|
+|[Debugging features](https://dev.epicgames.com/community/learning/tutorials/dXl5/advanced-debugging-in-unreal-engine)|[String-like classes](https://dev.epicgames.com/documentation/en-us/unreal-engine/string-handling-in-unreal-engine)|[Assorted tips and tricks](/2022/09/27/tips-and-tricks.html)|
 | :-- | :-- | :-- |
 |[All UPROPERTY specifiers](https://benui.ca/unreal/uproperty/)|[All UFUNCTION specifiers](https://benui.ca/unreal/ufunction/)|[All UCLASS specifiers](https://benui.ca/unreal/uclass/)|
 |[All USTRUCT specifiers](https://benui.ca/unreal/ustruct/)|[All UPARAM specifiers](https://benui.ca/unreal/uparam/)|[All UENUM and UMETA specifiers](https://benui.ca/unreal/uenum-umeta/)|

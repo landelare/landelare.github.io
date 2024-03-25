@@ -1,7 +1,7 @@
 ---
 title: "Assorted tips and tricks"
 excerpt: "A small collection of hidden settings."
-last_modified_at: 2023-09-27
+last_modified_at: 2024-03-25
 ---
 
 This will be nothing new for you if you've read
@@ -44,14 +44,13 @@ doesn't seem to have an effect. That's EditorPerProjectUserSettings.ini without
 Default in its name.
 
 <sup>
-This regressed in UE5: the popup that would show compilation progress in UE4
-doesn't appear anymore.
-As of writing, this is not fixed yet.
-The current version is 5.2.0.
+There's a bug between 5.0 and 5.3: the popup that would show compilation
+progress does not appear.
 Your project will look like it's not launching, but you can observe high CPU
 usage while your code is otherwise compiling in the background normally.
 You will get either the editor splash screen, or a message box with an error
 eventually.
+This bug did not exist in UE4 and was fixed in 5.4.
 </sup>
 
 # Restore camera after Play-In-Editor
@@ -69,9 +68,8 @@ PIV was the old name of PIE: Play-In-Viewport.
 # Debug memory-related crashes
 
 Launch with `-stompmalloc` (use
-[UnrealVS](https://docs.unrealengine.com/5.1/en-US/using-the-unrealvs-extension-for-unreal-engine-cplusplus-projects/)
-or
-[EzArgs](https://plugins.jetbrains.com/plugin/16411-ezargs)) and issue the
+[UnrealVS](https://dev.epicgames.com/documentation/en-us/unreal-engine/using-the-unrealvs-extension-for-unreal-engine-cplusplus-projects)
+or [EzArgs](https://plugins.jetbrains.com/plugin/16411-ezargs)) and issue the
 `gc.CollectGarbageEveryFrame 1` console command.
 
 Attempt to reproduce your problem, you should have a much cleaner call stack
@@ -99,18 +97,6 @@ EnableTransport=False
 [/Script/TcpMessaging.TcpMessagingSettings]
 EnableTransport=False
 ```
-
-# Greatly reduce shader compilation
-
-_UE5.1 update: This is now turned on by default._
-
-DefaultEngine.ini:
-```
-[SystemSettings]
-r.ShaderCompiler.JobCacheDDC=1
-```
-
-This makes shaders get compiled on demand instead of thousands upfront.
 
 # Use your entire CPU to compile shaders
 
