@@ -1,6 +1,7 @@
 ---
 title:  "Simple GAS tutorial"
 excerpt: "Demystifying Unreal's Gameplay Ability System."
+last_modified_at: 2024-03-25
 ---
 
 Epic Games, unlike most of its competitors in the "freely-available game engine"
@@ -13,7 +14,7 @@ that ship with the engine and are used directly in such AAA blockbusters as
 Fortnite (and some canceled titles, like Paragon).
 
 One of these is the
-[Gameplay Ability System](https://docs.unrealengine.com/5.3/en-US/gameplay-ability-system-for-unreal-engine/),
+[Gameplay Ability System](https://dev.epicgames.com/documentation/en-us/unreal-engine/gameplay-ability-system-for-unreal-engine),
 which can be considered to be the vastly superior replacement for the obsolete
 actor damage system still in the engine from Unreal Tournament.
 

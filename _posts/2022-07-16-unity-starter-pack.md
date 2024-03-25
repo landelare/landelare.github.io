@@ -1,7 +1,7 @@
 ---
 title:  "Unity to Unreal starter pack"
 excerpt: "A small collection of things that I wish I was told when I jumped ship."
-last_modified_at: 2024-01-02
+last_modified_at: 2024-03-25
 ---
 
 It seems that
@@ -17,13 +17,25 @@ As someone who had to make a similar call a few years ago, I can say that even
 accounting for the months "lost" on porting and having to learn new tools, it
 was still worth it. (Obviously the project was not near shipping, YMMV.)
 
-# UE4 or UE5?
+# Which version?
 
-As of writing, 5.3 is the latest stable version.
+Unless you have a project going already, UE4 can be essentially considered dead.
+There is a `4.27-plus` branch where it's kept on life support (mostly bumping
+version numbers of packages/APIs so that you can still ship to mobile app stores).
+
+Some platforms (mainly Quest for VR) offer their own engine forks that you might
+want to consider.
+
+The license has changed with 5.4. For non-game purposes, you might want to opt
+for 5.3 and use the old payment structure, patching any bugs that you encounter
+yourself to avoid having to accept the new license (although, chances are that
+you're exempt if you're reading this).
+
+Assuming none of the above applies to you, generally you should be using the
+latest non-preview version.
 There is no TECH/LTS split in Unreal.
-Versions with "preview" in their names are just that, betas, anything else
-numbered is stable (generally, more stable than a Unity LTS version, and you can
-apply your own fixes on top of the engine's source if needed).
+Any numbered version not marked preview is stable (generally, more stable than a
+Unity LTS version).
 
 The system requirements for UE4 and UE5 are the same, but UE5 defaults to higher
 fidelity settings out of the box.
@@ -36,23 +48,6 @@ UE5's high-end rendering features such as Nanite and Lumen have a relatively
 large setup or resolution-based cost, but they scale extremely well, so
 performance on a sandbox scene is not really relevant.
 
-With earlier versions, there were a few situations (mostly mobile and VR) where
-UE4 was still an obvious winner, but as time goes on, its advantage is eroding.
-
-For mobile specifically, UE4's API and runtime support has stagnated, and you'll
-probably need to use a custom engine build of `4.27-plus` to get accepted in the
-two big app stores.
-On the other hand, UE5 does not support 32-bit targets.
-
-VR has also been making steady progress; if you're not shipping right away,
-chances are all the remaining issues will have been fixed by the time you ship.
-Shipping for Quest is where one might consider sticking with UE4 for the time
-being.
-
-Unless you want to commit to the 4.27+ branch for your entire project, I would
-strongly recommend starting on the latest UE5 version right away to avoid 
-generating extra porting work.
-
 # Development
 
 Unity has a very programmer-centric development style compared to Unreal, with
@@ -62,7 +57,7 @@ Even designers often deal with C# code and everything revolves around
 
 Unreal is not just more artist-focused, but the entire architecture is different
 in a way that I don't think the
-[official documentation](https://docs.unrealengine.com/4.27/en-US/Basics/UnrealEngineForUnityDevs/)
+[official documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-for-unity-developers)
 explains well enough.
 Definitely read that page, but then please come back here and let me tell you
 about the things that took me some time to realize. :)
@@ -91,7 +86,8 @@ The sandbox is BP and it provides a similar rapid iteration workflow.
 
 There are QoL tools that attempt to do some form of hot reloading, one of which
 is [broken](https://horugame.com/dont-use-hot-reload-in-ue4), and the
-[other one](https://docs.unrealengine.com/5.3/en-US/using-live-coding-to-recompile-unreal-engine-applications-at-runtime/) is unstable.
+[other one](https://dev.epicgames.com/documentation/en-us/unreal-engine/using-live-coding-to-recompile-unreal-engine-applications-at-runtime)
+is unstable.
 Feel free to use Live Coding, but you'll need some time to get used to working
 with this style of development—you'll get some number of successful reloads
 (anywhere from 0 to many) before you need to ultimately close the Unreal Editor,
