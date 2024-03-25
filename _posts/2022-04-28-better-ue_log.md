@@ -1,7 +1,7 @@
 ---
 title:  "A better UE_LOG"
 excerpt: "Step 1 of a journey towards hopefully better logging in Unreal Engine."
-last_modified_at: 2023-12-22
+last_modified_at: 2024-03-25
 ---
 
 **[Part 2→](/2022/05/03/better-ue_log-2.html)**
@@ -132,7 +132,7 @@ auto FillArgs(FStringFormatOrderedArguments& Args, F&& First, R&&... Rest)
 
 For the purists, it might be news that Epic updated the UE coding conventions
 and  `<type_traits>` is now
-[fair game](https://docs.unrealengine.com/5.0/en-US/epic-cplusplus-coding-standardblueprint-debugging-in-unreal-engine/#useofstandardlibraries).
+[fair game](https://dev.epicgames.com/documentation/en-us/unreal-engine/epic-cplusplus-coding-standard-for-unreal-engine#useofstandardlibraries).
 The UE versions of these are stuck on C++11 so I'd recommend moving on and using 
 the shorter/better STL versions, as weirdly as it might sound.
 
