@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2024-03-25
+last_modified_at: 2024-03-28
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -862,6 +862,31 @@ completion in the UCLASS's destructor, etc.
 # Miscellaneous extras
 
 Useful things that don't really fit any other category.
+
+## Logging
+
+You'll see the legacy UE_LOG macro being used in lots of online resources.
+It's using legacy C varargs with all the issues that it comes with: if you're
+seeing prefix \* operators being used with FStrings, that's part of the
+workarounds it requires to be even able to pass the parameter at all.
+
+It has been replaced by the C\+\+-based, type-safe UE_LOGFMT that uses a
+.NET-inspired syntax:
+
+```c++
+UE_LOGFMT(LogTemp, Display, "My values: {0} {1}", 123, MyString);
+```
+
+Although UE_LOGFMT is strictly superior, it's still weirdly lacking support for
+some of the engine's own types (e.g., FVector).
+
+I have [written](/2022/04/28/better-ue_log.html)
+[some](/2022/05/03/better-ue_log-2.html)
+[articles](/2023/03/21/better-ue_log-3.html) on this topic, and published a
+[sample library](https://github.com/landelare/llog) that's capable of
+conveniently and type-safely logging most Unreal types, even in STL containers.
+It's published under a very permissive free software license in case you only
+want to grab the formatter part of it.
 
 ## Assertions
 
