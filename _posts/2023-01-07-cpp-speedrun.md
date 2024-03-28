@@ -863,6 +863,24 @@ completion in the UCLASS's destructor, etc.
 
 Useful things that don't really fit any other category.
 
+## Logging
+
+You'll see the legacy UE_LOG macro being used in lots of online resources.
+It's using C varargs with all the issues that it comes with, and has been
+replaced by UE_LOGFMT for newer code.
+Despite the longer name, the full line will end up being shorter, so you have
+nothing to lose.
+
+Although UE_LOGFMT is strictly superior, it's still weirdly lacking support for
+the engine's own types (e.g., FVector).
+I have [written](/2022/04/28/better-ue_log.html)
+[some](/2022/05/03/better-ue_log-2.html)
+[articles](/2023/03/21/better-ue_log-3.html) on this topic, and published a
+[sample library](https://github.com/landelare/llog) that's capable of
+conveniently and type-safely logging most Unreal and STL types.
+It's published under a very permissive license in case you only want to grab the
+formatter part of it.
+
 ## Assertions
 
 Unreal comes with a rich set of assertion macros, none having `assert` in their
