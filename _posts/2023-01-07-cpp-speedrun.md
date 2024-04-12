@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2024-03-28
+last_modified_at: 2024-04-12
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -468,7 +468,34 @@ fewer surprises in store.
 See [Lyra](https://dev.epicgames.com/documentation/en-us/unreal-engine/lyra-sample-game-in-unreal-engine)
 itself.
 
+### Validity
+
+There are non-nullptr UObject pointers that are considered invalid (such as, but
+not limited to "pending kill" from the fine print above).
+
+Only checking for nullness with, e.g., `if (SomeUObject)` will often work with
+pending kill enabled, but not always.
+This makes bugs caused by invalid pointers very difficult to reproduce and debug:
+in this mode, nulling the pointers is also reliant on GC timing.
+
+To check the validity of a raw UObject\*, use the global IsValid() or GetValid()
+methods.
+IsValid returns a bool, GetValid is a shortcut for
+`IsValid(Input) ? Input : nullptr`.
+This makes the following C++17 construct convenient to use if you want a
+temporary copy of a pointer:
+```c++
+if (auto* Ptr = GetValid(Something->GetSomeUObject()))
+{
+    // Ptr may be used here
+}
+```
+
+`if (auto* Ptr = SomeUObject; IsValid(Ptr))` is also completely fine, and has no
+drawbacks if you prefer writing it that way.
+
 ### Object pointers
+{:.no_toc}
 
 There are smart pointers that let you reference UObjects from a "regular" C++
 object that cannot have `UPROPERTY`s.
