@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2024-04-12
+last_modified_at: 2024-04-23
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -38,10 +38,13 @@ C++ is great at core architecture, performance, and being source controlled;
 BP is great at asset references, visuals, ease of programming for non-technical
 people, and fast iteration.
 
-Since BP is essentially unmergeable, you'll need to consider this for your
-version control setup.
+Since most blueprints are .uassets and essentially unmergeable, you'll need to
+consider this for your version control setup.
 The most common approach is to use exclusive checkouts and file locks, although
 good team communication scales surprisingly well.
+Some .uassets can be merged (e.g., data assets in 5.3, data-only BPs in 5.4),
+but these are the exceptions and they can't be matched by a filename pattern in
+.gitattributes or a P4 typemap.
 
 There is a thing as too much C++.
 Do not ever hardcode an asset path into C++, these often lead to broken
