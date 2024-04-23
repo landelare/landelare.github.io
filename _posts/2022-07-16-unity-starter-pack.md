@@ -1,7 +1,7 @@
 ---
 title:  "Unity to Unreal starter pack"
 excerpt: "A small collection of things that I wish I was told when I jumped ship."
-last_modified_at: 2024-03-25
+last_modified_at: 2024-04-23
 ---
 
 It seems that
@@ -192,6 +192,9 @@ references alive when you move or rename something.
 You'll need to avoid merges with a locking workflow using something like Git LFS
 or P4.
 One File Per Actor provides some relief for .umaps, use it (4.26+)!
+5.3 and 5.4 have made some assets mergeable, but this is not enough to cover the
+entire workflow (and they're all \*.uasset, impossible to tell apart in
+.gitattributes).
 
 Unity uses quaternions throughout with helper functions such as `Euler` to
 convert from designer-friendly representations, making it relatively
