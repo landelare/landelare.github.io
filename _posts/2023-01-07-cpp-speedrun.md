@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2024-04-23
+last_modified_at: 2024-06-12
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -107,7 +107,7 @@ the Output panel for the full, unabridged errors.
 [Here](https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine#turnofftheerrorlistwindow)'s
 how to turn it off and prevent it from coming back.
 
-While VS2022 17.9 sports some official support for Unreal Engine projects, it's
+While VS2022 17.10 sports some official support for Unreal Engine projects, it's
 very limited (working on custom engine builds of 5.4+ only), and it's still not
 perfectly stable.
 IntelliSense will sometimes "give up" on some files:
