@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2024-06-12
+last_modified_at: 2024-08-16
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -100,21 +100,36 @@ still available in a
 ## VS2022
 {:.no_toc}
 
-Out of the box, VS does not understand Unreal macros or the build system, and
-IntelliSense will often break, displaying nonsensical errors.
-The Error List is essentially useless for Unreal; you'll always want to look at
-the Output panel for the full, unabridged errors.
-[Here](https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine#turnofftheerrorlistwindow)'s
-how to turn it off and prevent it from coming back.
+VS2022's Unreal support is currently in preview, and it has to be explicitly
+installed in the Visual Studio Installer.
+It's not stable yet, but it improves the experience tremendously on VS2022
+17.11+ and Unreal 5.4+ compared to the traditional way of using an
+Unreal-generated "fake" .sln file.
 
-While VS2022 17.10 sports some official support for Unreal Engine projects, it's
-very limited (working on custom engine builds of 5.4+ only), and it's still not
-perfectly stable.
-IntelliSense will sometimes "give up" on some files:
+I'd suggest trying .uproject first (File -> Open -> Unreal Engine project),
+falling back to a generated .sln only if things break, or if your project is too
+old to be eligible.
+It takes several minutes for the engine code to get parsed at first; things will
+appear broken until this is complete.
+This is normal for large C++ codebases.
+
+Using the .sln, VS has a harder time than with .uproject: IntelliSense often
+breaks, displaying nonsensical errors and polluting the Error List with phantom
+entries.
+
+The Error List is essentially useless for Unreal solutions; you'll always want
+to look at the Output panel for the full, unabridged errors.
+[Here](https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine#turnofftheerrorlistwindow)'s
+how to turn it off and prevent it from coming back.<br>
+**If an error does not appear in Output, it's not an error.**
+
+IntelliSense sometimes "gives up" on some files entirely with a .sln:
 this usually manifests in the files losing highlighting, or getting red
 squigglies on everything.
-To fix this, there are two popular commercially-available extensions that add
-full Unreal support and various other convenience features that work with .sln:
+
+To fix this and to get a better experience with .sln, there are two popular
+commercial extensions that add full Unreal support and various other convenience
+features:
 
 * [ReSharper](https://www.jetbrains.com/resharper-cpp/) (JetBrains)
 * [Visual Assist](https://www.wholetomato.com) (Whole Tomato)
@@ -139,10 +154,11 @@ Since the .sln that Unreal generates doesn't have real folders in it (only
 them to default to somewhere in Intermediate where they won't build.
 Use one of the extensions above to create new files, or create them "raw" in the
 filesystem and regenerate your solution to pick them up.
+This is not an issue with .uproject, which provides real folders.
 
-If you're using VS without Visual Assist or ReSharper, I highly recommend having
-Unreal Wizard's toolbar on your main toolbar for the "Generate Project Files"
-button.
+If you're using VS with a .sln, but without Visual Assist or ReSharper, I highly
+recommend having Unreal Wizard's toolbar on your main toolbar for its "Generate
+Project Files" button.
 When IntelliSense breaks, pressing that and reloading often resolves the issue.
 If that doesn't work, the next step is deleting the `.vs` folder in your project.
 
@@ -151,20 +167,12 @@ If you don't have a license and a server farm set up for it, it will only slow
 your builds down, so get rid of it.
 It's also been reported to break shader compilation in this case.
 
-The official VS Unreal plugin ("IDE support for Unreal Engine") is more annoying
-than useful.
-If it's giving you errors, you may freely uninstall it.
-It's not really needed for anything substantial, especially if you're running
-ReSharper.
-
 ## Rider
 {:.no_toc}
 
 Since Rider contains ReSharper out of the box, it mostly Just Works™.
-Although it can work with Unreal-generated .slns, it also supports opening the
-.uproject file directly as a project, meaning that you'll never need to bother
-with (re-)generating a solution.
-This is the preferred approach.
+Although it can work with the Unreal-generated .slns, too, its .uproject support
+is mature and recommended to use.
 
 The Error List advice from VS partially applies to Rider, as it also likes to
 discard useful parts of error messages in its pretty display.
@@ -177,13 +185,6 @@ the button could be "Toggle Console View" next to "Build Output" or
 For Rider,
 [EzArgs](https://plugins.jetbrains.com/plugin/16411-ezargs) can replicate some
 of the functionality of UnrealVS.
-Contrary to Rider's claims in the pop-up that you will almost certainly see, the
-RiderLink plugin is **NOT** required and only provides some minor features.
-It may be used, of course, but if you ever have build errors referring to
-`module rules named 'RD'`, it should be the prime suspect.
-The fix is to delete every Rider plugin from your project and/or engine.
-
-It's similar to the VS IDE support for Unreal Engine plugin in this respect.
 
 # Project structure
 
