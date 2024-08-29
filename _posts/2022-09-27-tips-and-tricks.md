@@ -1,10 +1,10 @@
 ---
 title: "Assorted tips and tricks"
-excerpt: "A small collection of hidden settings."
-last_modified_at: 2024-03-25
+excerpt: "A small collection of hidden settings and other features."
+last_modified_at: 2024-08-29
 ---
 
-This will be nothing new for you if you've read
+This collection of tricks used to be part of the
 [Unity starter pack](/2022/07/16/unity-starter-pack.html), but these turned out
 to be more popular among people who are otherwise not transitioning from Unity.
 
@@ -74,6 +74,15 @@ or [EzArgs](https://plugins.jetbrains.com/plugin/16411-ezargs)) and issue the
 
 Attempt to reproduce your problem, you should have a much cleaner call stack
 leading to the crash, often directly telling you what went wrong.
+
+# Find and print references to UObjects
+
+If you have a UObject that should have been garbage collected, but it isn't,
+calling `FReferenceChainSearch::FindAndPrintStaleReferencesToObjects` on it will
+log what other objects are currently referencing it, preventing its deletion.
+
+Unreal itself will call this if you end a Play-In-Editor session and strongly
+reference something (e.g., with a TStrongObjectPtr) that the engine wants gone.
 
 # Opt out of data collection
 
