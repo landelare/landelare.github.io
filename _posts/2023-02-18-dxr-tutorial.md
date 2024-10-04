@@ -1,6 +1,7 @@
 ---
 title: "Self-contained DirectX Raytracing tutorial"
 excerpt: "DXR with no GitHub repositories or helper frameworks."
+last_modified_at: 2024-10-04
 ---
 
 <script type="text/javascript">
@@ -123,20 +124,22 @@ All yours.
 
 # Requirements
 
-You'll need the following:
+You'll need development tools for DirectX and C++ if you don't have them already.
+The easiest way to get these is by installing "Game Development with C++" in
+Visual Studio 2022 Community.
 
-* Most importantly, a GPU that actually supports DXR at least at Tier 1.0
-* Windows 10 1809 or later
-* Recent drivers for your GPU with DXR support
-* Development tools. The easiest way to get them is by installing
-  "Game Development with C++" in Visual Studio 2022 Community.
+If you're not using Windows 11 version 24H2 or later, you must have a real GPU
+that supports at least DXR Tier 1.0.
 
-Unfortunately, having hardware support is a strict requirement.
-The old DXR software emulation is API-incompatible and abandoned.
-As of writing, these models support DXR from each major vendor:
+These models support DXR from each major vendor:
 * AMD: Radeon RX 6000 or newer support Tier 1.1.
 * Intel: Arc A-series or newer support Tier 1.1.
 * Nvidia: GeForce GTX 1000 cards support Tier 1.0. Anything RTX supports 1.1.
+
+Windows 11 Version 24H2 added DXR Tier 1.1 support to
+<abbr title="Windows Advanced Rasterization Platform, the official software renderer">WARP</abbr>,
+which is always available, regardless of your GPU model (even with no GPU at all!).
+You'll be able to use it by uncommenting one line of code shown later.
 
 Tier 1.1 lets "traditional" shaders trace rays inline—such as a pixel shader
 dealing with its reflections—along with additional functionality missing from
@@ -163,7 +166,7 @@ Make these three files with your text editor of choice:
 `build.cmd`
 ```bat
 dxc shader.hlsl /T lib_6_3 /Fh shader.fxh /Vn compiledShader
-cl program.cpp /nologo /std:c++20
+cl program.cpp /nologo /std:c++20 /Zi
 ```
 
 `shader.hlsl`
@@ -710,13 +713,30 @@ minimalism).
 This will make the window render actual pixels when running at >100% DPI.
 Otherwise Windows would scale a lower-resolution image up.
 
+<sup>
+You might want to deliberately opt _out_ with `DPI_AWARENESS_CONTEXT_UNAWARE`
+if you have a high-DPI screen and a weak GPU, or planning to rely on software
+emulation.
+</sup>
+
 ```cpp
 int main()
 {
+    // Alternatively, DPI_AWARENESS_CONTEXT_UNAWARE
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 ```
 
-Go through the motions to get a well-behaved window.
+Next, let's go through the motions to get a well-behaved window.
+
+<sup>
+If your GPU is weak, or if you're planning to rely on WARP, you'll probably want
+to make the window smaller than the default.
+To do this, replace the last two `CW_USEDEFAULT` arguments with your desired
+width and height.
+For WARP, think _really_ small, such as 320x240.
+Emulation is **slow**.
+This size is for the entire window, including its title bar, borders, etc.
+</sup>
 
 ```cpp
     WNDCLASSW wcw = {.lpfnWndProc = &WndProc,
@@ -724,8 +744,9 @@ Go through the motions to get a well-behaved window.
                      .lpszClassName = L"DxrTutorialClass"};
     RegisterClassW(&wcw);
     HWND hwnd = CreateWindowExW(0, L"DxrTutorialClass", L"DXR tutorial",
-                                WS_VISIBLE | WS_OVERLAPPEDWINDOW, CW_USEDEFAULT,
-                                CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+                                WS_VISIBLE | WS_OVERLAPPEDWINDOW,
+                                CW_USEDEFAULT, CW_USEDEFAULT,
+                                /*width=*/CW_USEDEFAULT, /*height=*/CW_USEDEFAULT,
                                 nullptr, nullptr, nullptr, nullptr);
 ```
 
@@ -810,6 +831,7 @@ We'll be creating these objects first, used to create any further resources
 and to submit and synchronize GPU commands:
 
 ```cpp
+IDXGIFactory4* factory;
 ID3D12Device5* device;
 ID3D12CommandQueue* cmdQueue;
 ID3D12Fence* fence;
@@ -817,7 +839,21 @@ void InitDevice()
 {
 ```
 
-Query for the availability of the debug layer and activate it if present.
+Let's start by asking for a DXGI factory.
+Creating it in advance makes it easier to use WARP later.
+
+We'll try to create a factory with debugging and fall back to a regular one if
+it's unavailable.
+This will be the case on PCs without the dev tools/SDK.
+
+```cpp
+    if (FAILED(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG,
+                                  IID_PPV_ARGS(&factory))))
+        CreateDXGIFactory2(0, IID_PPV_ARGS(&factory));
+```
+
+Next, query for the availability of the D3D12 debug layer and activate it if
+present.
 This is technically not needed, but very useful if you decide to play around
 with the code.
 This needs to be done before D3D12CreateDevice, as turning the debug layer on or
@@ -829,12 +865,22 @@ off will cause device removed.
         debug->EnableDebugLayer(), debug->Release();
 ```
 
+Finally, let's actually create the device.
+No GPU supports DXR but not feature level 12_1, so there's no need to go lower
+than that.
+
+If you want to use WARP, uncomment the `EnumWarpAdapter` line.
+
+<sup>
 Feel free to bump the feature level up to 12_2 if you want to target DirectX 12
-Ultimate.
-No GPU supports DXR but not 12_1, so there's no need to go lower than that.
+Ultimate on real hardware.
+</sup>
 
 ```cpp
-    D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_12_1, IID_PPV_ARGS(&device));
+    IDXGIAdapter* adapter = nullptr;
+    // Uncomment the following line to use software rendering with WARP:
+    // factory->EnumWarpAdapter(IID_PPV_ARGS(&adapter));
+    D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, IID_PPV_ARGS(&device));
 ```
 
 A well-behaved program would query the device for its capabilities at this point
@@ -1481,7 +1527,7 @@ Because `instanceData` is a permanently-mapped GPU resource, we're already done.
 {:.no_toc}
 
 Now that the instance buffer is complete, we can build it into the TLAS.
-Due to all the helpers written so far, this is trivial.
+With all the helpers written so far, this is straightforward.
 
 ```cpp
 ID3D12Resource* tlas;
@@ -1496,7 +1542,8 @@ Create the scratch space for TLAS updates in advance.
 
 ```cpp
     auto desc = BASIC_BUFFER_DESC;
-    desc.Width = updateScratchSize;
+    // WARP bug workaround: use 8 if the required size was reported as less
+    desc.Width = std::max(updateScratchSize, 8ULL);
     desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
     device->CreateCommittedResource(&DEFAULT_HEAP, D3D12_HEAP_FLAG_NONE, &desc,
                                     D3D12_RESOURCE_STATE_COMMON, nullptr,
