@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2024-08-16
+last_modified_at: 2024-10-24
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -70,23 +70,30 @@ There are two practical choices for an IDE, Visual Studio and JetBrains Rider.
 As of writing, Rider on Windows requires you to have a license for Visual Studio
 according to JetBrains (which may be Community if you're eligible).
 For the other two platforms, you're left with only Rider.
-
-Visual Studio is only viable starting from 2022 version 17.7; avoid everything
-earlier.
-Rider gained Unreal support in version 2022.1.
-Visual Studio **Code** is an entirely different product and is considered broken
-for Unreal development.
+Visual Studio **Code** is an entirely different product, which is widely
+considered broken for Unreal development.
 CLion, despite being the C\+\+ IDE in the IntelliJ world, does not support
 Unreal.
+
+Old versions of Visual Studio and Rider (from years ago) did not properly
+support Unreal Engine projects.
+Make sure your IDE is up to date.
 
 The decision between Visual Studio and Rider mostly boils down to price and GUI
 preference.
 If your computer has 16 GB of RAM or less, you might also want to consider that
 VS generally uses less RAM than Rider.
 
-VS Community can't be beaten on its zero price, and essentially all of Rider's
-features are available as a VS add-in in the form of ReSharper for slightly
-cheaper.
+VS Community is completely free, even for commercial use, assuming that you're
+not working for an enterprise.
+The full terms are
+[here](https://visualstudio.microsoft.com/license-terms/vs2022-ga-community/);
+what counts as an enterprise is described near the bottom of the first page.<br>
+Rider is free for non-commercial use only.
+
+If you want to pay, essentially all of Rider's features are available as a VS
+add-in in the form of ReSharper for slightly cheaper.
+
 If you're not eligible for Community, having a VS license needs to be factored
 into Rider's price on Windows.<br>
 There's also a discounted ReSharper+Rider bundle.
