@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2024-08-16
+last_modified_at: 2024-10-24
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -84,9 +84,16 @@ preference.
 If your computer has 16 GB of RAM or less, you might also want to consider that
 VS generally uses less RAM than Rider.
 
-VS Community can't be beaten on its zero price, and essentially all of Rider's
-features are available as a VS add-in in the form of ReSharper for slightly
-cheaper.
+Rider is free for non-commercial use only.
+VS Community is free even for commercial use, assuming you're not working for an
+enterprise.
+The full terms are
+[here](https://visualstudio.microsoft.com/license-terms/vs2022-ga-community/);
+what counts as an enterprise is described near the bottom of the first page.
+
+If you want to pay, essentially all of Rider's features are available as a VS
+add-in in the form of ReSharper for slightly cheaper.
+
 If you're not eligible for Community, having a VS license needs to be factored
 into Rider's price on Windows.<br>
 There's also a discounted ReSharper+Rider bundle.
