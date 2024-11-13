@@ -1,7 +1,7 @@
 ---
 title:  "Simple GAS tutorial"
 excerpt: "Demystifying Unreal's Gameplay Ability System."
-last_modified_at: 2024-03-25
+last_modified_at: 2024-11-13
 ---
 
 Epic Games, unlike most of its competitors in the "freely-available game engine"
@@ -76,6 +76,12 @@ the [WTFPL 2](https://wtfpl2.com), so feel free to copy what you need.
 
 This tutorial was written against Unreal Engine 5.3.2.
 It will not work on 5.2 or earlier.
+
+<sup>
+The only notable change between 5.3.2 and 5.5 is the deprecation of
+non-instanced gameplay abilities.
+Good riddance.
+</sup>
 
 # Project setup
 
