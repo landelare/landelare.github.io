@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2024-10-24
+last_modified_at: 2025-02-14
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -978,7 +978,8 @@ It's great for single- and multiplayer both, but especially powerful in
 multiplayer, simply because it has more things to deal with on your behalf.
 
 [This](https://github.com/tranek/GASDocumentation) is one of the best pieces of
-community documentation for it.
+community documentation for it, and I wrote
+[a quickstart tutorial](/2024/01/15/simple-gas-tutorial.html).
 
 ### Gameplay Tags
 {:.no_toc}
