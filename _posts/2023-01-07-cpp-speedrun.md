@@ -1,7 +1,7 @@
 ---
 title: "Unreal C++ speedrun"
 excerpt: "Gain months' worth of Unreal C++ experience in a single article."
-last_modified_at: 2025-02-14
+last_modified_at: 2025-04-09
 ---
 
 This article assumes significant experience with C++, but not necessarily within
@@ -648,7 +648,7 @@ check(Example3 == nullptr); // UObject is not a child of AActor
 
 .NET's delegates and events (member function pointers + their `this`) also come
 in Unreal flavor.
-[This](https://benui.ca/unreal/delegates-intro/) is a good overview.
+[This](https://unreal-garden.com/tutorials/delegates-intro/) is a good overview.
 
 Dynamic delegates work based on the reflection system and can only call
 UFUNCTIONs.
@@ -997,11 +997,11 @@ the official documentation.
 This is a UPROPERTY specifier that lets you create a C++ UMG widget with its
 sub-widgets being visually created in the designer and "arriving" in the
 UPROPERTY by name.
-[Here](https://benui.ca/unreal/ui-bindwidget/)'s an entire article on it.
+[Here](https://unreal-garden.com/tutorials/ui-bindwidget/)'s an entire article on it.
 
 # Useful links for reference
 
 |[Debugging features](https://dev.epicgames.com/community/learning/tutorials/dXl5/advanced-debugging-in-unreal-engine)|[String-like classes](https://dev.epicgames.com/documentation/en-us/unreal-engine/string-handling-in-unreal-engine)|[Assorted tips and tricks](/2022/09/27/tips-and-tricks.html)|
 | :-- | :-- | :-- |
-|[All UPROPERTY specifiers](https://benui.ca/unreal/uproperty/)|[All UFUNCTION specifiers](https://benui.ca/unreal/ufunction/)|[All UCLASS specifiers](https://benui.ca/unreal/uclass/)|
-|[All USTRUCT specifiers](https://benui.ca/unreal/ustruct/)|[All UPARAM specifiers](https://benui.ca/unreal/uparam/)|[All UENUM and UMETA specifiers](https://benui.ca/unreal/uenum-umeta/)|
+|[All UPROPERTY specifiers](https://unreal-garden.com/docs/uproperty/)|[All UFUNCTION specifiers](https://unreal-garden.com/docs/ufunction/)|[All UCLASS specifiers](https://unreal-garden.com/docs/uclass/)|
+|[All USTRUCT specifiers](https://unreal-garden.com/docs/ustruct/)|[All UPARAM specifiers](https://unreal-garden.com/docs/uparam/)|[All UENUM and UMETA specifiers](https://unreal-garden.com/docs/uenum-umeta/)|
