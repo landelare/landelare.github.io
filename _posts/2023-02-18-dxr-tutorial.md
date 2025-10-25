@@ -1,7 +1,7 @@
 ---
 title: "Self-contained DirectX Raytracing tutorial"
 excerpt: "DXR with no GitHub repositories or helper frameworks."
-last_modified_at: 2024-10-04
+last_modified_at: 2025-10-25
 ---
 
 <script type="text/javascript">
@@ -64,9 +64,6 @@ last_modified_at: 2024-10-04
     });
 </script>
 
-This article is not about Unreal, unless you really want to manually deal with
-this below the RHI level (my recommendation: don't).
-
 Most ~~frustrating~~existing DXR tutorials out there ask you to clone a Git
 repository and/or download a premade library, then walk you through how to use
 _the thing you just downloaded_ instead of teaching you about DXR itself.
@@ -78,13 +75,6 @@ DXR **from absolute scratch**.
 No framework, no additional downloads, just pure "how do I use this API?"
 reference material from `main()` to animation and some basic raytracing effects.
 
-Advanced C++ knowledge is assumed, along with some basic DX12.
-I'm also not covering what ray tracing is, how/why it works, or the necessary
-linear algebra.
-Although setting up and using DX12 will be part of the article in the name of
-being self-contained, it will help if you can already write a basic rasterized
-hello world DX12 cube, know the difference between a barrier and a fence, etc.
-
 You'll be able to read this article, copy-paste the code blocks in it from top
 to bottom, and end up with this 100% raytraced scene:
 
@@ -93,6 +83,13 @@ to bottom, and end up with this 100% raytraced scene:
 In fact, you can click <button onclick="thatButton()">this button</button> to
 remove the article and explanations around the code blocks for unfettered
 copy-pasting.
+
+Advanced C++ knowledge is assumed, along with some basic DX12.
+I'm also not covering what ray tracing is, how/why it works, or the necessary
+linear algebra.
+Although setting up and using DX12 will be part of the article in the name of
+being self-contained, it will help if you can already write a basic rasterized
+hello world DX12 cube, know the difference between a barrier and a fence, etc.
 
 You'll learn to:
 * Write raytracing shaders in HLSL.
@@ -126,7 +123,9 @@ All yours.
 
 You'll need development tools for DirectX and C++ if you don't have them already.
 The easiest way to get these is by installing "Game Development with C++" in
-Visual Studio 2022 Community.
+Visual Studio 2022 or 2026 Community.
+This tutorial was written before VS2026 was released, but it will work with it.
+The DirectX 12 Agility SDK is **not** required.
 
 If you're not using Windows 11 version 24H2 or later, you must have a real GPU
 that supports at least DXR Tier 1.0.
@@ -180,8 +179,9 @@ void dummy(){}
 int main(){}
 ```
 
-Open `x64 Native Tools Command Prompt for VS 2022` from your Start menu,
-navigate to your project folder, and run `build.cmd` to end up with `program.exe`.
+Open `x64 Native Tools Command Prompt for VS 2022` (or 2026) from your Start
+menu, navigate to your project folder, and run `build.cmd` to end up with
+`program.exe`.
 Check if it works and runs before you proceed, then [click here](#shader-code)
 to skip the next section.
 
@@ -271,11 +271,18 @@ The 2D texture where we'll write the final color is a UAV though.
 RWTexture2D<float4> uav : register(u0);
 ```
 
+<sup>
+A real raytracer would need way more resources than the bare minimum shown here.
+For instance, normal vectors for all the meshes contained in the BVH to compute
+the direction of reflected rays.
+SM6.6 `ResourceDescriptorHeap` can work wonders for this.
+</sup>
+
 ## Constants
 {:.no_toc}
 
-To avoid dealing with more resource bindings or a CBV,
-let's hardcode a few things from the scene:
+To avoid dealing with more resources or even a CBV, let's hardcode a few things
+from the scene:
 
 ```hlsl
 static const float3 camera = float3(0, 1.5, -7);
@@ -350,17 +357,18 @@ These flags will be used later.
 ```
 
 It's time for the main attraction: invoking the raytracing hardware!
-For more information on these parameters, refer to the
-[documentation](https://learn.microsoft.com/en-us/windows/win32/direct3d12/traceray-function).
-What's important for us is that we're tracing `ray` in the `scene` with the
-given `inout payload`.
-
-Note that carrying local variables across a TraceRay call is expensive.
-They will likely need to be spilled out to VRAM and restored later.
+Ignore the hardcoded arguments for now, what's important for us is that we're
+tracing `ray` in the `scene` with the given `inout payload`.
 
 ```hlsl
     TraceRay(scene, RAY_FLAG_NONE, 0xFF, 0, 0, 0, ray, payload);
 ```
+
+<sup>
+For more information on TraceRay's parameters, refer to the
+[documentation](https://learn.microsoft.com/en-us/windows/win32/direct3d12/traceray-function).
+It's very powerful for a shader intrinsic.
+</sup>
 
 Once our ray has had its adventure, likely invoking multiple other shaders on
 its way, the final state of the payload is now available.
@@ -373,6 +381,12 @@ This completes `RayGeneration()`.
     uav[idx] = float4(payload.color, 1);
 }
 ```
+
+<sup>
+Note that carrying local variables across a TraceRay call can be expensive.
+They will likely need to be spilled out to VRAM and read back later.
+Here, we're only reading from the `payload`.
+</sup>
 
 ## Miss
 
@@ -480,16 +494,21 @@ void HitCube(inout Payload payload, float2 uv)
 This is a 0-based index into the object's triangle list that we'll provide later
 in C++.
 To get back to the vertices "properly", we'd need to bind the vertex (and
-usually index) buffers as SRVs.
-Ain't nobody got time for that! :)
+usually index) buffers as SRVs, but we skipped that earlier.
 
-I'll construct the vertex and index buffers in a particular order in C++, so
-that the object-space normal vector can be conjured from just the index:
+Instead, I'll construct the vertex and index buffers in a particular order later
+in C++, so that the object-space normal vector can be conjured from just the
+index:
 
 ```hlsl
     tri /= 2;
     float3 normal = (tri.xxx % 3 == uint3(0, 1, 2)) * (tri < 3 ? -1 : 1);
 ```
+
+<sup>
+This is just a visual trick, it's not important to understand how it works.
+You can replace it with `float3 normal = 0.xxx;` for a duller outcome.
+</sup>
 
 Transforming this to world space is relatively simple: the transformation matrix
 is available "for free" through intrinsics.
@@ -499,18 +518,24 @@ Since this is a normal vector, we're not interested in the translation component
     float3 worldNormal = normalize(mul(normal, (float3x3)ObjectToWorld4x3()));
 ```
 
-(I also know that the cube won't be subject to non-uniform scaling.
-If you change that, you'll need to use the inverse transpose of the matrix.)
+<sup>
+I also know in advance that the cube won't be subject to non-uniform scaling.
+If you change that, you'll need to use the inverse transpose of the matrix.
+</sup>
 
-Let's give the cube a look that's not entirely uninteresting.
-The trick I'm doing with `uv` to give the cube's edges dark bands is possible
-because the indices are in a very specific order in the index buffer.
+Let's give the cube a look that's not entirely uninteresting:
 
 ```hlsl
     float3 color = abs(normal) / 3 + 0.5;
     if (uv.x < 0.03 || uv.y < 0.03)
         color = 0.25.rrr;
 ```
+
+<sup>
+This is another visual trick that relies on foreknowledge of the index buffer's
+special properties, it's not important to understand how it works.
+You can remove the `if` and its body for a more traditional DirectX demo cube.
+</sup>
 
 Let's finish with some utterly fake and incorrect mockery of lighting, then
 record the final color in the payload to complete this function:
@@ -797,6 +822,7 @@ void Init(HWND hwnd)
     DECLARE_AND_CALL(InitTopLevel);
     DECLARE_AND_CALL(InitRootSignature);
     DECLARE_AND_CALL(InitPipeline);
+    DECLARE_AND_CALL(InitShaderTables);
 #undef DECLARE_AND_CALL
 }
 ```
@@ -1155,7 +1181,7 @@ We simply need to call it for each array to implement `InitMeshes`:
 }
 ```
 
-### Raytracing acceleration structures
+### Acceleration structures
 
 For raytracing to work at a sensible FPS, your GPU needs space partitioning data
 for efficient geometry lookup.
@@ -1614,13 +1640,9 @@ from its binary form.
 
 Raytracing PSOs have a different type that doesn't inherit from
 `ID3D12PipelineState`, because that would make too much sense.
-We'll also need to keep identifiers to the important shaders from the library
-for later dispatch.
 
 ```cpp
 ID3D12StateObject* pso;
-constexpr UINT64 NUM_SHADER_IDS = 3;
-ID3D12Resource* shaderIDs;
 void InitPipeline()
 {
 ```
@@ -1656,6 +1678,12 @@ individual shaders within.
                                      .ClosestHitShaderImport = L"ClosestHit"};
 ```
 
+<sup>
+Having multiple hit groups can be used to handle different types of materials.
+A transparent or alpha-masked material would have an `AnyHitShaderImport`, for
+instance.
+</sup>
+
 `sizeof(Payload)` in the HLSL that we wrote is 20 (3+1+1 dwords).
 The built-in ray-triangle intersection returns float2 barycentrics (2 dwords).
 
@@ -1686,6 +1714,7 @@ camera→¹mirror→²floor→³light.
 ```
 
 Pack these structs into the PSO description type du jour and create the object.
+This completes PSO creation.
 
 ```cpp
     D3D12_STATE_SUBOBJECT subobjects[] = {
@@ -1698,6 +1727,24 @@ Pack these structs into the PSO description type du jour and create the object.
                                     .NumSubobjects = std::size(subobjects),
                                     .pSubobjects = subobjects};
     device->CreateStateObject(&desc, IID_PPV_ARGS(&pso));
+}
+```
+
+### Shader tables
+
+You might have noticed that the PSO is given the entire shader library.
+DXR offers a lot of runtime flexibility: a program can use different shaders
+within the same library on the CPU side without having to change PSO, and
+`TraceRay()` in HLSL can affect what shaders run for each individual ray.
+
+Predictably, this tutorial will use none of this flexibility, and we'll instead
+hardcode the same 3 shaders all the time.
+
+```cpp
+constexpr UINT64 NUM_SHADER_IDS = 3;
+ID3D12Resource* shaderIDs;
+void InitShaderTables()
+{
 ```
 
 A shader identifier is 32 bytes, but it must be aligned to 64 bytes, so simply
@@ -1745,7 +1792,13 @@ Note that `ClosestHit` is not used but rather the hit group it belongs to.
     shaderIDs->Unmap(0, nullptr);
 ```
 
-With this, we're finally ready to dispatch rays, and this function is done.
+<sup>
+Technically, this is one ID for ray generation, a 1-sized array of miss shader
+IDs, and another 1-sized array for the hit groups.
+Callables would go here, too, if we had any.
+</sup>
+
+With this, this function is done, and we're finally ready to dispatch rays.
 
 ```cpp
     props->Release();
@@ -1859,7 +1912,8 @@ To keep things fresh, DispatchRays packs all of its parameters into one huge
 struct.
 
 We packed the shader records in exactly this order at offsets of 0, 64, 128.
-Everything is just one shader with no local root parameters (size = 32).
+Everything is just one shader with no local root parameters (size = 32),
+and the tables only have 1 shader each.
 
 ```cpp
     D3D12_DISPATCH_RAYS_DESC dispatchDesc = {
